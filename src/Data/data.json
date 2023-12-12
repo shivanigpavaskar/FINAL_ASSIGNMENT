@@ -1,0 +1,25 @@
+{
+  "users": [
+    {
+      "id": 1
+    },
+    {
+      "email": "sp@gmail.com",
+      "password": "Abcde@12345",
+      "designation": "Trainer",
+      "firstName": "s",
+      "lastName": "p",
+      "confirmPassword": "Abcde@12345",
+      "id": 2
+    },
+    {
+      "firstName": "alisha",
+      "lastName": "mendonca",
+      "designation": "Student",
+      "email": "am@gmail.com",
+      "password": "Alisha@123",
+      "confirmPassword": "Alisha@123",
+      "id": 3
+    }
+  ]
+}
