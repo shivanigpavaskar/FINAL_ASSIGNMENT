@@ -1,17 +1,21 @@
- import { useRoutes } from 'react-router-dom';
- import routes from './Routes/Router';
-import  Welcome  from './Welcome';
+import { useRoutes } from 'react-router-dom'
+import routes from './Routes/Router'
  
-function App() {
+
+
+ 
+function App () {
 const routing = useRoutes(routes);
 
   return (
-    <>
-  <Welcome />
-{routing}
-
-    </>
+    <div>{routing}</div>
   )
 }
 
-export default App
+
+  
+   
+
+export default App;
+
+    

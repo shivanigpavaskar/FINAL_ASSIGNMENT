@@ -45,7 +45,7 @@ function Login() {
           if (user.password === values.password) {
             if (user.designation === values.designation) {
               alert("Login Successful!");
-              navigate('/Home')
+              navigate('/Sidebar')
             } else {
               actions.setErrors({
                 designation: "wrong designation"

@@ -21,5 +21,24 @@
       "confirmPassword": "Alisha@123",
       "id": 3
     }
+  ],
+  "courses": [
+    {
+      "title": "sdsd",
+      "overview": "vujv",
+      "creatorName": "sunidhiii",
+      "duration": "2-4",
+      "image": "blob:http://localhost:5173/78601ee1-fb84-48ed-994a-62e40f7b38d0",
+      "id": 1,
+      "description": "sds",
+      "video": "../src/assets/videos/videoplayback.3gpp",
+      "document": "../src/assets/videos/videoplayback.3gpp",
+      "videos": {
+        "title": "",
+        "description": "",
+        "video": "",
+        "document": ""
+      }
+    }
   ]
 }
