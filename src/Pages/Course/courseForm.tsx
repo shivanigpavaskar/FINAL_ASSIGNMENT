@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
-// import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
  
 interface FormData {
@@ -25,8 +25,8 @@ interface CourseFormProps {
 }
 
 const CourseForm: React.FC<CourseFormProps> = ({ onSubmit,initialData }) => {
-  // const { courseId } = useParams<{ courseId: string }>();
-  // console.log('Course ID:', courseId);
+  const { courseId } = useParams<{ courseId: string }>();
+  console.log('Course ID:', courseId);
 
   const [formData, setFormData] = useState({
     title: initialData?.title || '',

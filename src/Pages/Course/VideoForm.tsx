@@ -8,6 +8,12 @@ import { useParams } from 'react-router-dom';
   description: string;
   video: string;
   document: string ;
+  // videos:{
+  //   title:string;
+  //   description:string;
+  //   video:string;
+  //   document:string;
+  // }
 }
 
 

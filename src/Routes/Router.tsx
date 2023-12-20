@@ -1,6 +1,7 @@
 import { lazy } from "react";
 import LoaderPage from "../layouts/LoaderPage";
 import Welcome from "../Welcome";
+import Dashbord from "../Pages/Dashbord";
    
 const Home = LoaderPage(lazy(async () => await import('../Home')))
 const Signup = LoaderPage(lazy(async () => await import('../Pages/Signup')))
@@ -25,6 +26,10 @@ const routes = [
         element:<Home/>
     },
     {
+        path:'/Dashboard',
+        element:<Dashbord/>
+    },
+    {
         path:'/Signup',
         element:<Signup/>
     },
@@ -42,7 +47,12 @@ const routes = [
     },
     {
         path:'/Courses',
-        element: <Courses/>
+        element: <Courses/>,
+        // children: [
+        //     {
+        //         path: 'Courses/:courseId/', 
+        //         element: <VideoForm/>
+        //     },]
     },
     {
         path:'/Sidebar',

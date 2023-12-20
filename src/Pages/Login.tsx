@@ -44,8 +44,9 @@ function Login() {
         if (user.email === values.email) {
           if (user.password === values.password) {
             if (user.designation === values.designation) {
+              localStorage.setItem('UserLoggedIn',JSON.stringify(user))
               alert("Login Successful!");
-              navigate('/Sidebar')
+              navigate('/Dashboard')
             } else {
               actions.setErrors({
                 designation: "wrong designation"
