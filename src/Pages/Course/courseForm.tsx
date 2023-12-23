@@ -2,7 +2,12 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
- 
+ interface VideoData{
+  vtitle:string;
+    description:string;
+    video:string;
+    document:string;
+ }
 interface FormData {
   id:number;
   title: string;
@@ -10,13 +15,14 @@ interface FormData {
   creatorName: string;
   duration: string;
   image:string;
-  videos:{
-    title:string;
-    description:string;
-    video:string;
-    document:string;
-  }
+  videos:VideoData[];
+
 }
+
+
+
+
+
 
 interface CourseFormProps {
   onSubmit: (newCourse: FormData) => void;
@@ -34,26 +40,28 @@ const CourseForm: React.FC<CourseFormProps> = ({ onSubmit,initialData }) => {
     creatorName: initialData?.creatorName || '',
     duration: initialData?.duration || '',
     image: initialData?.image || '',
-     
+    videos:[]
+   
   });
 
+
+  
   const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
-    setFormData({
-      ...formData,
+    setFormData(prevState =>({ ...prevState,
       [name]: value,
-    });
+    }));
+     
   };
 
   
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    setFormData({
-      ...formData,
+    setFormData(prevState =>({
+      ...prevState,
       image: file ? URL.createObjectURL(file) : '',
-    });
+    }));
   };
-
 
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -66,8 +74,13 @@ const CourseForm: React.FC<CourseFormProps> = ({ onSubmit,initialData }) => {
       formDataToSend.append('overview', formData.overview);
       formDataToSend.append('creatorName', formData.creatorName);
       formDataToSend.append('duration', formData.duration);
+      // formDataToSend.append('vtitle', formData.videos.vtitle);
+      // formDataToSend.append('description', formData.videos.description);
+      // formDataToSend.append('video', formData.videos.video);
+      // formDataToSend.append('document', formData.videos.document);
       if (formData.image) {
         formDataToSend.append('image', formData.image);
+        
     }
       console.log('Submitting data....', formData);
       const response = await axios.post('http://localhost:3000/courses', formData);
@@ -84,6 +97,9 @@ const CourseForm: React.FC<CourseFormProps> = ({ onSubmit,initialData }) => {
       creatorName: '',
       duration: '',
       image:'',
+      videos:[],
+      
+    
     });
   };
 

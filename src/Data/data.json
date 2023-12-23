@@ -33,61 +33,23 @@
   ],
   "courses": [
     {
-      "title": "tyrt",
-      "overview": "vujv",
+      "title": "m",
+      "overview": "asdsasa",
       "creatorName": "sunidhiii",
       "duration": "2-4",
-      "image": "blob:http://localhost:5173/78601ee1-fb84-48ed-994a-62e40f7b38d0",
+      "image": "blob:http://localhost:5173/62268114-5113-42ef-b106-d7fc2db3cead",
+      "videos": [
+        {
+          "vtitle": "m",
+          "description": "m",
+          "video": "../src/assets/videos/videoplayback.3gpp",
+          "document": "../src/assets/videos/depositphotos_214317688-stock-illustration-flower-vector-icon-isolated-on.jpg"
+        }
+      ],
       "id": 1,
-      "description": "rgc",
+      "description": "m",
       "video": "../src/assets/videos/videoplayback.3gpp",
-      "document": "../src/assets/videos/videoplayback.3gpp",
-      "videos": {
-        "title": "",
-        "description": "",
-        "video": "",
-        "document": ""
-      }
-    },
-    {
-      "title": "sgp",
-      "overview": "nm,",
-      "creatorName": "sunidhiii",
-      "duration": "2",
-      "image": "",
-      "id": 2
-    },
-    {
-      "title": "",
-      "overview": "",
-      "creatorName": "",
-      "duration": "",
-      "image": "",
-      "id": 3
-    },
-    {
-      "title": "a",
-      "overview": "sss",
-      "creatorName": "s",
-      "duration": "2",
-      "image": "blob:http://localhost:5173/556109c6-2973-4c29-9cca-badf0eecb7dd",
-      "id": 4
-    },
-    {
-      "title": "",
-      "overview": "",
-      "creatorName": "",
-      "duration": "",
-      "image": "",
-      "id": 5
-    },
-    {
-      "title": "v",
-      "overview": "",
-      "creatorName": "",
-      "duration": "",
-      "image": "",
-      "id": 6
+      "document": "../src/assets/videos/depositphotos_214317688-stock-illustration-flower-vector-icon-isolated-on.jpg"
     }
   ]
 }

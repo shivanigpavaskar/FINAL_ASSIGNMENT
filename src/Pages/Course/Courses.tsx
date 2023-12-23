@@ -1,10 +1,15 @@
-import React, { useState} from "react";
+import React, { useEffect, useState } from "react";
 import CourseForm from "../../Pages/Course/courseForm";
 import "./Course.css";
 import { Link } from "react-router-dom";
 import Sidebar from "../../Components/Sidebar";
-import { useUser } from "../../Routes/UserContext";
-
+ 
+interface VideoData {
+  vtitle: string;
+  description: string;
+  video: string;
+  document: string;
+}
 interface Course {
   id: number;
   title: string;
@@ -12,31 +17,65 @@ interface Course {
   creatorName: string;
   duration: string;
   image: string;
-  videos: {
-    title: string;
-    description: string;
-    video: string;
-    document: string;
-  };
+  videos: VideoData[];
 }
 
 interface CoursesProps {}
 
 const Courses: React.FC<CoursesProps> = () => {
-  const { designation } = useUser();
-
   const [showCourseForm, setShowCourseForm] = useState(false);
   const [courses, setCourses] = useState<Array<Course>>([]);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
-   
-  const handleOpenCourseForm = () => {
-    setShowCourseForm(true);
-    setSelectedCourse(null);
-  };
+  const [userDesignation, setUserDesignation] = useState<string | null>(null);
+
+  useEffect(() => {
+    const userString = localStorage.getItem("UserLoggedIn");
+    if (userString) {
+      const { designation } = JSON.parse(userString);
+      setUserDesignation(designation);
+    }
+
+    fetch("http://localhost:3000/courses")
+      .then((response) => response.json())
+      .then((data) => setCourses(data));
+  }, []);
+
+  // const handleAddVideo = (video: VideoData) => {
+  //   setCurrentFormData((prevData) => ({
+  //     ...prevData,
+  //     videos: [...prevData.videos, video],
+  //   }));
+  // };
+
+  // const handleOpenCourseForm = () => {
+  //   setShowCourseForm(true);
+  //   setSelectedCourse(null);
+  // };
 
   const handleCloseCourseForm = () => {
     setShowCourseForm(false);
   };
+
+
+  const handleCreateCourse = () => {
+    const newCourse: Course = {
+      id: courses.length + 1,
+      title: 'New Course',
+      overview: 'Course Overview',
+      creatorName: 'Creator Name', // Placeholder
+      duration: '2 weeks',
+      image: '', // Placeholder
+      videos: [],
+    };
+
+    setCourses([...courses, newCourse]);
+    setShowCourseForm(true); // Automatically open the form after creating a new course
+  };
+
+
+
+
+
 
   const handleCourseFormSubmit = (newCourse: Course) => {
     if (selectedCourse) {
@@ -65,16 +104,17 @@ const Courses: React.FC<CoursesProps> = () => {
     alert("Course deleted successfully!");
   };
 
+
+
+
   return (
     <Sidebar>
       <div>
         <h2>Courses</h2>
-        { designation === 'Trainer' &&(
-          <button onClick={handleOpenCourseForm}>Create Course</button>
-        )
 
-        }
-        
+        {userDesignation === "Trainer" && (
+          <button onClick={handleCreateCourse}>Create Course</button>
+        )}
 
         <div>
           {courses.map((course) => (
@@ -89,23 +129,20 @@ const Courses: React.FC<CoursesProps> = () => {
                 <p>Faculty: {course.creatorName}</p>
                 <p>Duration: {course.duration} weeks</p>
 
-
-                {designation === 'Trainer' && (
+                {userDesignation === "Trainer" && (
                   <>
                     <button onClick={() => handleEdit(course)}>Edit</button>
                     <button onClick={() => handleDelete(course)}>Delete</button>
                   </>
                 )}
-                
-                 {designation === 'Trainer' &&(<Link to={`/${course.id}/add`}>
-                  <button>Add</button>
-                </Link>)
-                  
-                 }
-                 
+                {userDesignation === "Trainer" && (
+                  <Link to={`/${course.id}/add`}>
+                    <button>Add</button>
+                  </Link>
+                )}
 
-                  {designation === 'Student' && <button>Enroll</button>}
-               </div>
+                {userDesignation === "Student" && <button>Enroll</button>}
+              </div>
             </div>
           ))}
         </div>
@@ -126,40 +163,3 @@ const Courses: React.FC<CoursesProps> = () => {
 };
 
 export default Courses;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
