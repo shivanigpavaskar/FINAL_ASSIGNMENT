@@ -1,7 +1,7 @@
 import { useState, ReactNode } from "react";
 import "../App.css";
 
-import { FaBars, FaBook, FaTh, FaUserAlt } from "react-icons/fa";
+import { FaBars, FaBook, FaLockOpen, FaTh, FaUserAlt } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import { HouseLockFill, Phone } from "react-bootstrap-icons";
 
@@ -40,6 +40,14 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
       name: "AboutUs",
       icon: <Phone />,
     },
+    {
+      path: "/Logout",
+      name: "Logout",
+      icon: <FaLockOpen/>,
+    },
+
+
+
   ];
 
   return (

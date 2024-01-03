@@ -33,23 +33,54 @@
   ],
   "courses": [
     {
-      "title": "m",
-      "overview": "asdsasa",
-      "creatorName": "sunidhiii",
+      "title": "React",
+      "overview": "Course1",
+      "creatorName": "Shivani",
       "duration": "2-4",
-      "image": "blob:http://localhost:5173/62268114-5113-42ef-b106-d7fc2db3cead",
+      "image": "blob:http://localhost:5173/692b25db-3cdd-497b-a0e1-d5ca70e64197",
       "videos": [
         {
-          "vtitle": "m",
-          "description": "m",
-          "video": "../src/assets/videos/videoplayback.3gpp",
-          "document": "../src/assets/videos/depositphotos_214317688-stock-illustration-flower-vector-icon-isolated-on.jpg"
+          "vId": 1,
+          "vtitle": "React videon1",
+          "description": "fgd",
+          "video": "../assets/videos/How to build logics in programming.mp4",
+          "document": "abc.pdf"
+        },
+        {
+          "vId": 2,
+          "vtitle": " react",
+          "description": "nnln",
+          "video": "../assets/videos/How to build logics in programming.mp4",
+          "document": "../assets/videos/abc.pdf"
         }
       ],
-      "id": 1,
-      "description": "m",
-      "video": "../src/assets/videos/videoplayback.3gpp",
-      "document": "../src/assets/videos/depositphotos_214317688-stock-illustration-flower-vector-icon-isolated-on.jpg"
+      "id": 1
+    },
+    {
+      "title": "title",
+      "overview": "kkk",
+      "creatorName": "Sunidhiii",
+      "duration": "2-4",
+      "image": "blob:http://localhost:5173/853d657b-1673-49a4-80f8-c619a8f89f00",
+      "videos": [],
+      "id": 2
+    },
+    {
+      "title": "a",
+      "overview": "klk",
+      "creatorName": "Shivani",
+      "duration": "2-4",
+      "image": "blob:http://localhost:5173/46377f47-d290-4e66-b5af-34f3c9f6cce9",
+      "videos": [
+        {
+          "vId": 1,
+          "vtitle": "React videon1",
+          "description": "",
+          "video": "",
+          "document": ""
+        }
+      ],
+      "id": 3
     }
   ]
 }

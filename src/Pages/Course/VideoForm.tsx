@@ -1,43 +1,41 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-
+import ReactPlayer from "react-player";
+import './videoForm.css'
+ 
 interface VideoData {
+  vId: number;
   vtitle: string;
   description: string;
   video: string;
   document: string;
 }
-
-interface FormData {
+ 
+interface CourseData {
+  id: number;
   title: string;
-  description: string;
-  video: string;
-  document: string;
+  overview: string;
+  creatorId: number;
+  creatorName: string;
+  duration: string;
+  image: string;
   videos: VideoData[];
 }
-
-interface VideoFormProps {
-  formDataArray: VideoData[];
-  currentFormData: FormData;
-  // onFileChange: (name: string, file: File | null) => void;
-  // onSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>;
-}
-
+ 
 const CustomFileInput: React.FC<{
   label: string;
   onChange: (baseURL: string) => void;
 }> = ({ label, onChange }) => {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-
     if (file) {
-      const baseURL = "../src/assets/videos/" + file.name;
+      const baseURL = "../assets/videos/" + file.name;
       console.log("baseURL", baseURL);
       onChange(baseURL);
     }
   };
-
+ 
   return (
     <div>
       <label>{label}</label>
@@ -45,146 +43,197 @@ const CustomFileInput: React.FC<{
     </div>
   );
 };
-
-const VideoForm: React.FC<VideoFormProps> = () => {
+ 
+const VideoForm: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
-  console.log("Course ID:", courseId);
-
-  const [formDataArray, setFormDataArray] = useState<FormData[]>([]);
+  const [editVideoId, setEditVideoId] = useState<number | null>(null);
+  const [formDataArray, setFormDataArray] = useState<CourseData[]>([]);
+  const [videoIdCounter, setVideoIdCounter] = useState<number>(1);
+  const [userDesignation, setUserDesignation] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
-  const [currentFormData, setCurrentFormData] = useState<FormData>({
-    title: "",
+  const [currentFormData, setCurrentFormData] = useState<VideoData>({
+    vId: 0,
+    vtitle: "",
     description: "",
     video: "",
     document: "",
-    videos: [
-      {
+  });
+ 
+ 
+  useEffect(() => {
+    const fetchCourseData = async () => {
+      try {
+        const response = await axios.get<CourseData>(
+          `http://localhost:3000/courses/${courseId}`
+        );
+        console.log('Response:', response);
+        setFormDataArray([response.data]);
+        setVideoIdCounter(response.data.videos.length +1);
+      } catch (error) {
+        console.error("Error fetching course data:", error);
+      }
+    };
+ 
+    fetchCourseData();
+  }, [courseId]);
+ 
+ 
+    console.log("videos length" + videoIdCounter)
+ 
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setCurrentFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+ 
+  const handleFileChange = (type: string, baseURL: string) => {
+       
+        setCurrentFormData((prevFormData) => ({
+                ...prevFormData,
+                [type]: baseURL,
+              }));
+      };
+ 
+  const createVideo = async () => {
+    try {
+ 
+      const { vtitle, description, video, document } = currentFormData;
+ 
+     
+      const newVideoId = videoIdCounter;
+ 
+      const newVideo = { vId: newVideoId, vtitle, description, video, document };
+ 
+      const updatedCourse = { ...formDataArray[0] };
+      updatedCourse.videos.push(newVideo);
+ 
+      setFormDataArray([updatedCourse]);
+ 
+      await axios.patch(`http://localhost:3000/courses/${courseId}`, updatedCourse);
+ 
+ 
+      alert("Video Created successfully!");
+      handleCloseForm();
+      setCurrentFormData({
+        vId: 0,
         vtitle: "",
         description: "",
         video: "",
         document: "",
-      },
-    ],
-  });
-
-  
-
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, type } = e.target;
-
-    if (type !== "file") {
-      const newValue = e.target.value;
-      setCurrentFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: newValue,
-      }));
+      });
+    } catch (error) {
+      console.error("Error creating video:", error);
     }
   };
-
-  const handleFileChange = (name: string, file: string) => {
-    setCurrentFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: file,
-    }));
-  };
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (currentFormData.title && currentFormData.description) {
-      try {
-        console.log("Submitting data....", currentFormData);
-        const videoData = {
-          "vtitle": currentFormData.title || "",
-          "description": currentFormData.description || "",
-          "video": currentFormData.video || "",
-          "document": currentFormData.document || ""
-        };
-  
-        const rearrangedData = {
-          ...currentFormData,
-          "videos": [videoData]
-        };
-
-        await axios.patch(
-          `http://localhost:3000/courses/${courseId}`,
-          rearrangedData
-        );
-        alert("Video Created successfully!");
-        setFormDataArray((prevDataArray) => [
-          ...prevDataArray,
-          currentFormData,
-        ]);
-        setCurrentFormData({
-          title: "",
-          description: "",
-          video: "",
-          document: "",
-          videos: [],
-        });
-      } catch (error) {
-        console.error("Ops Error Creating course:", error);
-      }
-    } else {
-      alert("Please fill in title and description.");
-    }
-  };
-
+ 
   const handleOpenForm = () => {
     setIsFormOpen(true);
   };
-
+ 
   const handleCloseForm = () => {
     setIsFormOpen(false);
   };
 
-  const handleUpdate = (index: number) => {
-    setCurrentFormData({ ...formDataArray[index] });
+
+  const handleDelete = async (videoId: number) => {
+    try {
+      const updatedVideos = formDataArray[0].videos.filter(
+        (video) => video.vId !== videoId
+      );
+
+      const updatedCourse = {
+        ...formDataArray[0],
+        videos: updatedVideos,
+      };
+
+      setFormDataArray([updatedCourse]);
+
+      await axios.patch(
+        `http://localhost:3000/courses/${courseId}`,
+        updatedCourse
+      );
+
+      alert("Video Deleted Successfully!");
+    } catch (error) {
+      console.error("Error deleting video:", error);
+    }
   };
 
-  const handleDelete = (index: number) => {
-    const newDataArray = [...formDataArray];
-    newDataArray.splice(index, 1);
-    setFormDataArray(newDataArray);
+  const handleEdit = (video: VideoData) => {
+    setCurrentFormData(video);
+    setEditVideoId(video.vId);
   };
 
-  // useEffect(() => {
-  //    const userString = localStorage.getItem('UserLoggedIn');
-  //   if (userString) {
-  //     const { designation } = JSON.parse(userString);
-  //     setUserDesignation(designation);
-  //   }
 
-  //    axios.get(`http://localhost:3000/courses/${courseId}`)
-  //     // .then(response => {
-  //     //   // setVideos(response.data.videos);
-  //     //  })
-  //     .catch(error => {
-  //       console.error('Error fetching videos:', error);
-  //     });
-  // }, [courseId]);
+  const saveEditedVideo = async () => {
+    try {
+      const updatedVideos = formDataArray[0].videos.map((video) =>
+        video.vId === currentFormData.vId ? currentFormData : video
+      );
 
+      const updatedCourse = {
+        ...formDataArray[0],
+        videos: updatedVideos,
+      };
+
+      setFormDataArray([updatedCourse]);
+
+      await axios.patch(
+        `http://localhost:3000/courses/${courseId}`,
+        updatedCourse
+      );
+
+      alert("Video Updated Successfully!");
+      setEditVideoId(null); 
+    } catch (error) {
+      console.error("Error updating video:", error);
+    }
+  };
+
+  useEffect(() => {
+    const userString = localStorage.getItem("UserLoggedIn");
+    if (userString) {
+      const { designation } = JSON.parse(userString);
+      setUserDesignation(designation);
+    }
+  }, []);
+
+
+
+ 
   return (
     <div>
-      <h2>Add a new video for Course</h2>
-      <button onClick={handleOpenForm}>Add Video</button>
+ 
+ {  userDesignation === "Trainer" &&  (  <h2>Add a new video for Course{courseId}</h2>)}
+    
+ {userDesignation === "Trainer" && (
+        <button onClick={handleOpenForm} className="blue-button">
+          Add Video
+        </button>
+      )}
+     
 
+
+  
       {isFormOpen && (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={createVideo} method="post">
           <label>
-            Course Title:
+            Video Title:
             <input
               type="text"
-              name="title"
-              value={currentFormData.title}
+              name="vtitle"
+              value={currentFormData.vtitle}
               onChange={handleChange}
             />
           </label>
           <br />
           <br />
           <label>
-            Course Description:
+            Video Description:
             <textarea
               name="description"
               value={currentFormData.description}
@@ -192,60 +241,120 @@ const VideoForm: React.FC<VideoFormProps> = () => {
             />
           </label>
           <br />
-          <br />
           <CustomFileInput
             label="Video File"
-            onChange={(baseURL) => handleFileChange("video", baseURL)}
+            onChange={(baseURL) => handleFileChange("video",baseURL)}
           />
           <br />
           <CustomFileInput
             label="Documents"
-            onChange={(baseURL) => handleFileChange("document", baseURL)}
+            onChange={(baseURL) => handleFileChange("document",baseURL)}
           />
           <br />
-          <button type="submit">Create Course</button>
+          <button type="submit">Create Video</button>
           <button onClick={handleCloseForm}>Cancel</button>
         </form>
       )}
+ 
+      {formDataArray.map((courseData) => (
+        <div key={courseData.id}>
+          <h2>Videos for Course: {courseData.title}</h2>
+          <div className="video-container">
 
-      {formDataArray.map((videos, index) => (
-        <div key={index}>
-          <h2>Video{index + 1}</h2>
-          <p>{videos.title} has been created.</p>
-          <CourseCard data={videos} />
+          {courseData.videos.map((video) => (
+            <div key={video.vId} className="video-card" >
+                  <ReactPlayer
+                  url={video.video}
+                  width="100%"
+                  height="100%"
+                  controls
+                ></ReactPlayer>
 
-          <button onClick={() => handleUpdate(index)}>Update</button>
-          <button onClick={() => handleDelete(index)}>Delete</button>
+      <div className="video-details">
+<h3>Video: {video.vtitle}</h3>
+<p>Description: {video.description}</p>
+<p>
+                    Document:
+                    <button>
+                      <a href={video.document} download={video.document}>
+                        Download
+                      </a>
+                    </button>
+                  </p>
+                  {userDesignation === "Trainer" && (
+                    <>
+                  {editVideoId === video.vId ? (
+                    <>
+                      <label>
+                        Video Title:
+                        <input
+                          type="text"
+                          name="vtitle"
+                          value={currentFormData.vtitle}
+                          onChange={handleChange}
+                        />
+                      </label>
+                      <br />
+                      <br />
+                      <label>
+                        Video Description:
+                        <textarea
+                          name="description"
+                          value={currentFormData.description}
+                          onChange={handleChange}
+                        />
+                      </label>
+                      <br />
+                      <CustomFileInput
+                        label="Video File"
+                        onChange={(baseURL) =>
+                          handleFileChange("video", baseURL)
+                        }
+                      />
+                      <br />
+                      <CustomFileInput
+                        label="Documents"
+                        onChange={(baseURL) =>
+                          handleFileChange("document", baseURL)
+                        }
+                      />
+                      <br />
+                      <button onClick={saveEditedVideo}>Save</button>
+                      <button onClick={() => setEditVideoId(null)}>
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button onClick={() => handleEdit(video)}>Edit</button>
+                      <button onClick={() => handleDelete(video.vId)}>
+                        Delete
+                      </button>
+                    </>
+                  
+                  )}
+</>
+                  )}
+                  
+
+
+
+
+
+
+
+
+
+
+</div>
+
+             </div>
+          ))}
+        </div>
         </div>
       ))}
     </div>
   );
 };
-
-const CourseCard: React.FC<{ data: FormData }> = ({ data }) => {
-  return (
-    <div
-      style={{
-        border: "1px solid #ccc",
-        padding: "10px",
-        margin: "10px",
-        maxWidth: "400px",
-      }}
-    >
-      <p>
-        <strong>Title:</strong> {data.title}
-      </p>
-      <p>
-        <strong>Description:</strong> {data.description}
-      </p>
-      <p>
-        <strong>Video File:</strong> {data.video}
-      </p>
-      <p>
-        <strong>Document File:</strong> {data.document}
-      </p>
-    </div>
-  );
-};
-
+ 
 export default VideoForm;
