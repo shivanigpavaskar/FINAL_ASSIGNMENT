@@ -3,13 +3,13 @@ import LoaderPage from "../layouts/LoaderPage";
 import Welcome from "../Welcome";
 import Dashbord from "../Pages/Dashbord";
    
-const Home = LoaderPage(lazy(async () => await import('../Home')))
-const Signup = LoaderPage(lazy(async () => await import('../Pages/Signup')))
+ const Signup = LoaderPage(lazy(async () => await import('../Pages/Signup')))
 const Login = LoaderPage(lazy(async () => await import('../Pages/Login')))
 const CourseForm = LoaderPage(lazy(async () => await import('../Pages/Course/courseForm')))
 const VideoForm = LoaderPage(lazy(async () => await import('../Pages/Course/VideoForm')))
 const Courses = LoaderPage(lazy(async () => await import('../Pages/Course/Courses')))
 const Sidebar = LoaderPage(lazy(async () => await import('../Components/Sidebar')))
+const Logout = LoaderPage(lazy(async () => await import('../Pages/Logout')))
  
 
   
@@ -21,10 +21,7 @@ const routes = [
         element:< Welcome />
     },
 
-     {
-        path:'/Home',
-        element:<Home/>
-    },
+     
     {
         path:'/Dashboard',
         element:<Dashbord/>
@@ -58,6 +55,12 @@ const routes = [
         path:'/Sidebar',
         element: <Sidebar/>
     },
+    {
+        path:'/Logout',
+        element: <Logout/>
+    }, 
+    
+
      
 ];
 

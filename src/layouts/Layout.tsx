@@ -1,30 +1,32 @@
-import { ReactNode } from "react";
-import { Box } from  "@mui/material";
+import React,{ReactNode} from 'react';
+import img2 from "../assets/images/img2.png";
+import './layout.css';
 
-interface LayoutProps{
-    children:ReactNode
+interface LayoutProps {
+  children: ReactNode;
 }
 
- 
- 
- const Layout = ({ children }:LayoutProps) => {
-   return (
-    <Box sx={{ backgroundColor:"pink",
-display:"flex",
-flexDirection:{
-    xs:"column",
-    lg:"row"
-},
-color:"white",
-padding:3,
-gap:3,
-overflow:"hidden",
-height:"100vh"
-}}
-    >
 
-    </Box>
-   )
- }
- 
- export default Layout
+
+
+const Layout: React.FC<LayoutProps> = ({ children }) => {
+  return (
+    <div className="wrapper">
+      
+       <img src={img2} alt="Sample" className="image-fixed" />
+
+       <main className="container">
+        <h2>Easy Learning</h2>
+        </main>
+        {children}
+       <footer className="footer">
+        <div>
+          <a style={{color:"white"}}   href="/privacy-policy">Privacy Policy</a> | <span>&copy; {new Date().getFullYear()} Easy Learning</span>
+        </div>
+      </footer>
+
+    </div>
+  );
+}
+
+export default Layout;

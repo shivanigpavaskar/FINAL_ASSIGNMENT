@@ -4,6 +4,8 @@ import { basicSchema2 } from "../Components/ValidationSchema";
 import { Formik, FormikHelpers, yupToFormErrors } from "formik";
 import { Link,useNavigate } from "react-router-dom";
 import axios from "axios";
+import Layout from "../layouts/Layout";
+import './signup.css'
  
 interface FormData {
   firstName: string;
@@ -49,7 +51,9 @@ function Signup() {
   };
 
   return (
+
     <>
+    <Layout>
       <h3>Sign Up</h3>
       <div>
         <Formik
@@ -67,7 +71,7 @@ function Signup() {
             handleSubmit,
             // isValid,
           }) => (
-            <Container>
+            <Container className="form">
               <Form onSubmit={handleSubmit} autoComplete="off">
                 <div>
                   <Form.Label htmlFor="fname">Enter Your FirstName:</Form.Label>
@@ -208,7 +212,7 @@ function Signup() {
                 </div>
 
                 <div>
-                  <Button type="submit" disabled={isSubmitting}>
+                  <Button type="submit" disabled={isSubmitting}   className="Button">
                     Sign Up
                   </Button>
                   <br />
@@ -223,7 +227,9 @@ function Signup() {
           )}
         </Formik>
       </div>
+      </Layout>
     </>
+    
   );
 }
 

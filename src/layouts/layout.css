@@ -1,0 +1,41 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%; /* Ensure the body and html elements occupy the full height */
+  }
+  
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Set minimum height to the viewport height */
+  }
+  
+  .container {
+    display: flex;
+    flex-grow: 1; /* Allow the container to grow and occupy the available space */
+    align-items: flex-start;
+  }
+  
+  .image-fixed {
+    position: fixed;
+    left: 0;
+    top: 0;
+    margin-top: 30px;
+    width: 30%;  
+    height: 70%;
+  }
+  
+  .content {
+    margin-left: 170px;
+    padding: 20px;
+  }
+  
+  .footer {
+    background-color: blue; /* Set footer background color to blue */
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+    flex-shrink: 0; /* Prevent the footer from shrinking */
+    width: 100%; /* Make the footer span the full width */
+  }
+  

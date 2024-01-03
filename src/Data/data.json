@@ -38,22 +38,7 @@
       "creatorName": "Shivani",
       "duration": "2-4",
       "image": "blob:http://localhost:5173/692b25db-3cdd-497b-a0e1-d5ca70e64197",
-      "videos": [
-        {
-          "vId": 1,
-          "vtitle": "React videon1",
-          "description": "fgd",
-          "video": "../assets/videos/How to build logics in programming.mp4",
-          "document": "abc.pdf"
-        },
-        {
-          "vId": 2,
-          "vtitle": " react",
-          "description": "nnln",
-          "video": "../assets/videos/How to build logics in programming.mp4",
-          "document": "../assets/videos/abc.pdf"
-        }
-      ],
+      "videos": [],
       "id": 1
     },
     {

@@ -3,7 +3,8 @@ import CourseForm from "../../Pages/Course/courseForm";
 import "./Course.css";
 import { Link } from "react-router-dom";
 import Sidebar from "../../Components/Sidebar";
- 
+import axios from "axios";
+
 interface VideoData {
   vtitle: string;
   description: string;
@@ -18,6 +19,7 @@ interface Course {
   duration: string;
   image: string;
   videos: VideoData[];
+  classId?: number;
 }
 
 interface CoursesProps {}
@@ -34,78 +36,60 @@ const Courses: React.FC<CoursesProps> = () => {
       const { designation } = JSON.parse(userString);
       setUserDesignation(designation);
     }
-
-    fetch("http://localhost:3000/courses")
+fetch("http://localhost:3000/courses")
       .then((response) => response.json())
       .then((data) => setCourses(data));
   }, []);
 
-  // const handleAddVideo = (video: VideoData) => {
-  //   setCurrentFormData((prevData) => ({
-  //     ...prevData,
-  //     videos: [...prevData.videos, video],
-  //   }));
-  // };
-
-  // const handleOpenCourseForm = () => {
-  //   setShowCourseForm(true);
-  //   setSelectedCourse(null);
-  // };
-
-  const handleCloseCourseForm = () => {
-    setShowCourseForm(false);
-  };
 
 
   const handleCreateCourse = () => {
-    const newCourse: Course = {
-      id: courses.length + 1,
-      title: 'New Course',
-      overview: 'Course Overview',
-      creatorName: 'Creator Name', // Placeholder
-      duration: '2 weeks',
-      image: '', // Placeholder
-      videos: [],
-    };
-
-    setCourses([...courses, newCourse]);
-    setShowCourseForm(true); // Automatically open the form after creating a new course
+    console.log("Create Course button clicked");
+     setShowCourseForm(true);
+ 
   };
 
 
 
+  const handleEdit = (course: Course) => {
+    setSelectedCourse(course);
+    setShowCourseForm(true);
+  };
 
-
+  const handleCloseCourseForm = () => {
+    console.log("Create Course button clicked");
+    setShowCourseForm(false);
+  };
 
   const handleCourseFormSubmit = (newCourse: Course) => {
     if (selectedCourse) {
       const updatedCourses = courses.map((course) =>
         course.id === selectedCourse.id
-          ? { ...newCourse, id: course.id }
+          ? { ...newCourse, id: selectedCourse.id }
           : course
       );
       setCourses(updatedCourses);
     } else {
-      setCourses([...courses, { ...newCourse, id: courses.length + 1 }]);
+      const newId = Date.now();
+      setCourses([...courses, { ...newCourse, id: newId }]);
     }
-    // setCoursesUpdated(true);
     handleCloseCourseForm();
     alert("Course saved successfully!");
   };
 
-  const handleEdit = (course: Course) => {
-    setShowCourseForm(true);
-    setSelectedCourse(course);
+  const handleDelete = async (course: Course) => {
+    try {
+      await axios.delete(`http://localhost:3000/courses/${course.id}`);
+
+      const updatedCourses = courses.filter((c) => c.id !== course.id);
+      setCourses(updatedCourses);
+
+      alert("Course deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting course:", error);
+      alert("Error deleting course!");
+    }
   };
-
-  const handleDelete = (course: Course) => {
-    const updatedCourses = courses.filter((c) => c.id !== course.id);
-    setCourses(updatedCourses);
-    alert("Course deleted successfully!");
-  };
-
-
-
 
   return (
     <Sidebar>
@@ -137,11 +121,15 @@ const Courses: React.FC<CoursesProps> = () => {
                 )}
                 {userDesignation === "Trainer" && (
                   <Link to={`/${course.id}/add`}>
-                    <button>Add</button>
+                    <button>View</button>
                   </Link>
                 )}
 
-                {userDesignation === "Student" && <button>Enroll</button>}
+                {userDesignation === "Student" && (
+                  <Link to={`/${course.id}/add`}>
+                    <button>Enroll</button>
+                  </Link>
+                )}
               </div>
             </div>
           ))}
@@ -153,7 +141,10 @@ const Courses: React.FC<CoursesProps> = () => {
               <span className="close" onClick={handleCloseCourseForm}>
                 &times;
               </span>
-              <CourseForm onSubmit={handleCourseFormSubmit} />
+              <CourseForm
+                onSubmit={handleCourseFormSubmit}
+                initialData={selectedCourse}
+               />
             </div>
           </div>
         )}
