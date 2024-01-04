@@ -29,7 +29,8 @@ const Courses: React.FC<CoursesProps> = () => {
   const [courses, setCourses] = useState<Array<Course>>([]);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [userDesignation, setUserDesignation] = useState<string | null>(null);
-
+ 
+ 
   useEffect(() => {
     const userString = localStorage.getItem("UserLoggedIn");
     if (userString) {
@@ -90,6 +91,66 @@ fetch("http://localhost:3000/courses")
       alert("Error deleting course!");
     }
   };
+
+
+
+ 
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // const handleEnroll = (courseTitle: string) => {
+  //   const email = prompt('Enter your name to enroll:');
+  //   if (email) {
+  //     const currentEnrolledEmails = JSON.parse(localStorage.getItem('enrolledEmails') || '{}');
+  //     const updatedEnrolledEmails = {
+  //       ...currentEnrolledEmails,
+  //       [courseTitle]: [...(currentEnrolledEmails[courseTitle] || []), email]
+  //     };
+  //     localStorage.setItem('enrolledEmails', JSON.stringify(updatedEnrolledEmails));
+  //   }
+  // };
+
+
+
 
   return (
     <Sidebar>

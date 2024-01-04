@@ -10,11 +10,9 @@ const VideoForm = LoaderPage(lazy(async () => await import('../Pages/Course/Vide
 const Courses = LoaderPage(lazy(async () => await import('../Pages/Course/Courses')))
 const Sidebar = LoaderPage(lazy(async () => await import('../Components/Sidebar')))
 const Logout = LoaderPage(lazy(async () => await import('../Pages/Logout')))
- 
+const Classes = LoaderPage(lazy(async () => await import('../Pages/Classes')))
 
-  
  
-
 const routes = [
     {
         path:'/',
@@ -58,6 +56,10 @@ const routes = [
     {
         path:'/Logout',
         element: <Logout/>
+    }, 
+    {
+        path:'/Classes',
+        element: <Classes/>
     }, 
     
 

@@ -1,7 +1,8 @@
  
+import { useEffect,useState } from 'react';
 import Sidebar from '../Components/Sidebar';
 import './dashboard.css'
-
+ import axios from 'axios';
 
 import { Doughnut,Line } from "react-chartjs-2";
 
@@ -50,19 +51,83 @@ const lineChartOptions = {
 
 
 
+
+
+
+
+
+
+
  
 const Dashbord = () => {
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [totalCourses, setTotalCourses] = useState(0);
+
+
+  useEffect(() => {
+     axios.get(`http://localhost:3000/users`)
+      .then(response => {
+        if (response.status !== 200) {
+          throw new Error('Network response was not ok');
+        }
+        return response.data;  
+      })
+      .then(data => {
+        console.log("Received data", data);
+        if (!data || !data.users) {
+          throw new Error('Data structure is incorrect');
+        }
+        setTotalUsers(data.users.length);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+
+
+   
+  useEffect(() => {
+    axios.get(`http://localhost:3000/courses`)
+     .then(response => {
+       if (response.status !== 200) {
+         throw new Error('Network response was not ok');
+       }
+       return response.data;  
+     })
+     .then(data => {
+       console.log("Received data", data);
+       if (!data || !data.users) {
+         throw new Error('Data structure is incorrect');
+       }
+       setTotalCourses(data.users.length);
+     })
+     .catch(error => {
+       console.error('Error fetching data:', error);
+     });
+ }, []);
+
+
+  
+
+
+
+
+
+
+
+
+
   return (
  <Sidebar>
      <div className="dashboard-container">
     <div className="box-group">
       <div className="box">
         <h2>Total no. of users</h2>
-        <p>100</p>
+        <p>{totalUsers}</p>
       </div>
       <div className="box">
         <h2>Total no. of courses</h2>
-        <p>20</p>
+        <p>{totalCourses}</p>
       </div>
       <div className="box">
         <h2>Total  no. of classes</h2>

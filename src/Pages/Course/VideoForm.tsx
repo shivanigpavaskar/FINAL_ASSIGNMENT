@@ -23,6 +23,21 @@ interface CourseData {
   videos: VideoData[];
 }
  
+interface VideoProgressState {
+  played: number;
+  playedSeconds: number;
+  loaded: number;
+  loadedSeconds: number;
+}
+
+const formatTime = (seconds: number): string => {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+};
+
+
+
 const CustomFileInput: React.FC<{
   label: string;
   onChange: (baseURL: string) => void;
@@ -58,8 +73,54 @@ const VideoForm: React.FC = () => {
     video: "",
     document: "",
   });
+
+  const [playedSeconds, setPlayedSeconds] = useState(0);
+  const [totalSeconds, setTotalSeconds] = useState(0);
+  const [videoProgress, setVideoProgress] = useState(0);
+  const handleProgress = (state:VideoProgressState) => {
+     setPlayedSeconds(state.playedSeconds);
+    setTotalSeconds(state.loadedSeconds);
+    setVideoProgress(state.played);
+
+    localStorage.setItem( `videoProgress-${courseId}`, JSON.stringify(state));
+
+  };
  
  
+
+useEffect(() => {
+   const savedProgress = localStorage.getItem(`videoProgress-${courseId}`);
+  if (savedProgress) {
+      const parsedProgress = JSON.parse(savedProgress);
+      setPlayedSeconds(parsedProgress.playedSeconds);
+      setTotalSeconds(parsedProgress.loadedSeconds);
+      setVideoProgress(parsedProgress.played);
+  }
+}, [courseId]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   useEffect(() => {
     const fetchCourseData = async () => {
       try {
@@ -268,7 +329,11 @@ const VideoForm: React.FC = () => {
                   width="100%"
                   height="100%"
                   controls
+                  onProgress={handleProgress}
                 ></ReactPlayer>
+ <p>Played: {formatTime(playedSeconds)}</p>
+<p>Total Time: {formatTime(totalSeconds)}</p>
+      <p>Progress: {(videoProgress * 100).toFixed(2)}%</p>
 
       <div className="video-details">
 <h3>Video: {video.vtitle}</h3>
