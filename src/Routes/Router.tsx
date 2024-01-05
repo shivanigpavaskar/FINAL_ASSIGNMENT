@@ -58,7 +58,7 @@ const routes = [
         element: <Logout/>
     }, 
     {
-        path:'/Classes',
+        path:'/classes',
         element: <Classes/>
     }, 
     

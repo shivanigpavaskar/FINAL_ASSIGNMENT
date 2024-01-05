@@ -38,34 +38,43 @@
       "creatorName": "Shivani",
       "duration": "2-4",
       "image": "blob:http://localhost:5173/692b25db-3cdd-497b-a0e1-d5ca70e64197",
-      "videos": [],
-      "id": 1
-    },
-    {
-      "title": "title",
-      "overview": "kkk",
-      "creatorName": "Sunidhiii",
-      "duration": "2-4",
-      "image": "blob:http://localhost:5173/853d657b-1673-49a4-80f8-c619a8f89f00",
-      "videos": [],
-      "id": 2
-    },
-    {
-      "title": "a",
-      "overview": "klk",
-      "creatorName": "Shivani",
-      "duration": "2-4",
-      "image": "blob:http://localhost:5173/46377f47-d290-4e66-b5af-34f3c9f6cce9",
       "videos": [
         {
           "vId": 1,
           "vtitle": "React videon1",
-          "description": "",
-          "video": "",
-          "document": ""
+          "description": "abcd",
+          "video": "../assets/videos/How to build logics in programming.mp4",
+          "document": "../assets/videos/abc.pdf"
         }
       ],
-      "id": 3
+      "id": 1
+    },
+    {
+      "title": "Python",
+      "overview": "basics of python ",
+      "creatorName": "Raj",
+      "duration": "3",
+      "image": "blob:http://localhost:5173/d00aeb7f-8f79-4ce6-b17d-c22e85198d8f",
+      "videos": [
+        {
+          "vId": 1,
+          "vtitle": "Python video 1",
+          "description": "this course basically focuses on the basic aspects of python",
+          "video": "../assets/videos/How to build logics in programming.mp4",
+          "document": "../assets/videos/abc.pdf"
+        }
+      ],
+      "id": 2
+    }
+  ],
+  "class": [
+    {
+      "id": 1,
+      "overview": "i am creating this class for the course i have created ",
+      "document": "../assets/videos/abc.pdf",
+      "quiz": "../assets/videos/abc.pdf",
+      "course": "Python",
+      "duration": "8"
     }
   ]
 }
