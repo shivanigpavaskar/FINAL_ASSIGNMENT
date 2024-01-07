@@ -16,6 +16,7 @@ interface Course {
   title: string;
   overview: string;
   creatorName: string;
+  creatorEmail:string;
   duration: string;
   image: string;
   videos: VideoData[];
@@ -31,19 +32,30 @@ const Courses: React.FC<CoursesProps> = () => {
   const [userDesignation, setUserDesignation] = useState<string | null>(null);
  
  
-  useEffect(() => {
-    const userString = localStorage.getItem("UserLoggedIn");
-    if (userString) {
-      const { designation } = JSON.parse(userString);
-      setUserDesignation(designation);
-    }
-fetch("http://localhost:3000/courses")
+
+useEffect(() => {
+  const userString = localStorage.getItem("UserLoggedIn");
+  if (userString) {
+    const { designation, email } = JSON.parse(userString);
+    setUserDesignation(designation);
+
+    fetch("http://localhost:3000/courses")
       .then((response) => response.json())
-      .then((data) => setCourses(data));
-  }, []);
+      .then((data: Course[]) => {
+        let filteredCourses = data;
 
+         if (designation !== "Student") {
+          filteredCourses = data.filter(course => course.creatorEmail === email);
+        }
 
-
+        setCourses(filteredCourses);
+      })
+      .catch((error) => {
+        console.error("Error fetching courses:", error);
+        alert("Error fetching courses!");
+      });
+  }
+}, []);
 
 
 

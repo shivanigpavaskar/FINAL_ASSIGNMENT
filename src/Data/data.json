@@ -29,52 +29,38 @@
       "password": "Ruhi@12345",
       "confirmPassword": "Ruhi@12345",
       "id": 4
+    },
+    {
+      "firstName": "Priya",
+      "lastName": "Hadpad",
+      "designation": "Trainer",
+      "email": "ph@gmail.com",
+      "password": "Priya@123",
+      "confirmPassword": "Priya@123",
+      "id": 5
     }
   ],
   "courses": [
     {
-      "title": "React",
-      "overview": "Course1",
+      "title": "Html",
+      "overview": "Web designing course",
       "creatorName": "Shivani",
-      "duration": "2-4",
-      "image": "blob:http://localhost:5173/692b25db-3cdd-497b-a0e1-d5ca70e64197",
-      "videos": [
-        {
-          "vId": 1,
-          "vtitle": "React videon1",
-          "description": "abcd",
-          "video": "../assets/videos/How to build logics in programming.mp4",
-          "document": "../assets/videos/abc.pdf"
-        }
-      ],
+      "creatorEmail": "sp@gmail.com",
+      "duration": "2",
+      "image": "blob:http://localhost:5173/a429f12b-5724-4389-99ce-c81220975a64",
+      "videos": [],
       "id": 1
     },
     {
-      "title": "Python",
-      "overview": "basics of python ",
-      "creatorName": "Raj",
-      "duration": "3",
-      "image": "blob:http://localhost:5173/d00aeb7f-8f79-4ce6-b17d-c22e85198d8f",
-      "videos": [
-        {
-          "vId": 1,
-          "vtitle": "Python video 1",
-          "description": "this course basically focuses on the basic aspects of python",
-          "video": "../assets/videos/How to build logics in programming.mp4",
-          "document": "../assets/videos/abc.pdf"
-        }
-      ],
+      "title": "React",
+      "overview": "React course",
+      "creatorName": "Priya",
+      "creatorEmail": "ph@gmail.com",
+      "duration": "2-4",
+      "image": "blob:http://localhost:5173/a0859ee1-945a-488d-ad4b-36c954c00506",
+      "videos": [],
       "id": 2
     }
   ],
-  "class": [
-    {
-      "id": 1,
-      "overview": "i am creating this class for the course i have created ",
-      "document": "../assets/videos/abc.pdf",
-      "quiz": "../assets/videos/abc.pdf",
-      "course": "Python",
-      "duration": "8"
-    }
-  ]
+  "class": []
 }

@@ -18,6 +18,7 @@ interface CourseData {
   overview: string;
   creatorId: number;
   creatorName: string;
+  creatorEmail: string;
   duration: string;
   image: string;
   videos: VideoData[];
@@ -240,7 +241,7 @@ const VideoForm: React.FC = () => {
   return (
     <div>
       {userDesignation === "Trainer" && (
-        <h2>Add a new video for Course{courseId}</h2>
+        <h2>Add a new video for Course</h2>
       )}
 
       {userDesignation === "Trainer" && (
@@ -255,11 +256,11 @@ const VideoForm: React.FC = () => {
                   </Link>
                 )}
 
-{userDesignation === "Trainer" && (
+{/* {userDesignation === "Trainer" && (
                   <Link to={`/Classes`}>
                     <button>Class +</button>
                   </Link>
-                )}
+                )} */}
 
       {isFormOpen && (
         <form onSubmit={createVideo} method="post">
@@ -324,7 +325,7 @@ const VideoForm: React.FC = () => {
                       <a href={video.document} download={video.document}>
                         Download
                       </a>
-                    </button>
+                      </button>
                   </p>
                   {userDesignation === "Trainer" && (
                     <>

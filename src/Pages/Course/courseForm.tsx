@@ -13,6 +13,8 @@ interface FormData {
   title: string;
   overview: string;
   creatorName: string;
+  creatorEmail: string;
+
   duration: string;
   image:string;
   videos:VideoData[];
@@ -38,6 +40,8 @@ const CourseForm: React.FC<CourseFormProps> = ({ onSubmit,initialData }) => {
     title: initialData?.title || '',
     overview: initialData?.overview || '',
     creatorName: initialData?.creatorName || '',
+    creatorEmail: initialData?.creatorEmail || '',
+
     duration: initialData?.duration || '',
     image: initialData?.image || '',
     videos:[]
@@ -73,6 +77,8 @@ const CourseForm: React.FC<CourseFormProps> = ({ onSubmit,initialData }) => {
       formDataToSend.append('title', formData.title);
       formDataToSend.append('overview', formData.overview);
       formDataToSend.append('creatorName', formData.creatorName);
+      formDataToSend.append('creatorEmail', formData.creatorEmail);
+
       formDataToSend.append('duration', formData.duration);
       // formDataToSend.append('vtitle', formData.videos.vtitle);
       // formDataToSend.append('description', formData.videos.description);
@@ -95,6 +101,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ onSubmit,initialData }) => {
       title: '',
       overview: '',
       creatorName: '',
+      creatorEmail: '',
       duration: '',
       image:'',
       videos:[],
@@ -116,6 +123,13 @@ const CourseForm: React.FC<CourseFormProps> = ({ onSubmit,initialData }) => {
         type="text"
         name="creatorName"
         value={formData.creatorName}
+        onChange={handleInputChange}
+      />
+<label>Creator Email:</label>
+      <input
+        type="email"
+        name="creatorEmail"
+        value={formData.creatorEmail}
         onChange={handleInputChange}
       />
 
