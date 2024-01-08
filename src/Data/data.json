@@ -48,7 +48,15 @@
       "creatorEmail": "sp@gmail.com",
       "duration": "2",
       "image": "blob:http://localhost:5173/a429f12b-5724-4389-99ce-c81220975a64",
-      "videos": [],
+      "videos": [
+        {
+          "vId": 1,
+          "vtitle": "Html video1",
+          "description": " basics of html 2",
+          "video": "../assets/videos/How to build logics in programming.mp4",
+          "document": "../assets/videos/abc.pdf"
+        }
+      ],
       "id": 1
     },
     {

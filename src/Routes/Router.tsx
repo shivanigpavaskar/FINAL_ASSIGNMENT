@@ -1,16 +1,16 @@
 import { lazy } from "react";
 import LoaderPage from "../layouts/LoaderPage";
 import Welcome from "../Welcome";
-import Dashbord from "../Pages/Dashbord";
+import Dashbord from "../Pages/Dashboard/Dashbord";
    
- const Signup = LoaderPage(lazy(async () => await import('../Pages/Signup')))
-const Login = LoaderPage(lazy(async () => await import('../Pages/Login')))
+ const Signup = LoaderPage(lazy(async () => await import('../Pages/Registration/Signup')))
+const Login = LoaderPage(lazy(async () => await import('../Pages/Registration/Login')))
 const CourseForm = LoaderPage(lazy(async () => await import('../Pages/Course/courseForm')))
 const VideoForm = LoaderPage(lazy(async () => await import('../Pages/Course/VideoForm')))
 const Courses = LoaderPage(lazy(async () => await import('../Pages/Course/Courses')))
 const Sidebar = LoaderPage(lazy(async () => await import('../Components/Sidebar')))
-const Logout = LoaderPage(lazy(async () => await import('../Pages/Logout')))
-const Classes = LoaderPage(lazy(async () => await import('../Pages/Classes')))
+const Logout = LoaderPage(lazy(async () => await import('../Pages/Registration/Logout')))
+const Classes = LoaderPage(lazy(async () => await import('../Pages/Class/Classes')))
 
  
 const routes = [
