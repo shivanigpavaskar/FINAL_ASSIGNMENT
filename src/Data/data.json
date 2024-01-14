@@ -42,24 +42,6 @@
   ],
   "courses": [
     {
-      "title": "Html",
-      "overview": "Web designing course",
-      "creatorName": "Shivani",
-      "creatorEmail": "sp@gmail.com",
-      "duration": "2",
-      "image": "blob:http://localhost:5173/a429f12b-5724-4389-99ce-c81220975a64",
-      "videos": [
-        {
-          "vId": 1,
-          "vtitle": "Html video1",
-          "description": " basics of html 2",
-          "video": "../assets/videos/How to build logics in programming.mp4",
-          "document": "../assets/videos/abc.pdf"
-        }
-      ],
-      "id": 1
-    },
-    {
       "title": "React",
       "overview": "React course",
       "creatorName": "Priya",
@@ -68,6 +50,46 @@
       "image": "blob:http://localhost:5173/a0859ee1-945a-488d-ad4b-36c954c00506",
       "videos": [],
       "id": 2
+    },
+    {
+      "title": "Social Science",
+      "overview": "this course has the details of social science subject with variety of videos along with documents and quizez and many more!",
+      "creatorName": "Priya",
+      "creatorEmail": "ph@gmail.com",
+      "duration": "2",
+      "image": "blob:http://localhost:5173/891b4f5d-f106-4424-92a5-a96910f8e1d5",
+      "videos": [],
+      "id": 4
+    },
+    {
+      "title": "Sanskrit",
+      "overview": "भाषासु मुख्या मधुरा दिव्या गीर्वाणभारती।\nतत्रापि काव्यं मधुरं तस्मादपि सुभाषितम्॥",
+      "creatorName": "Shivani",
+      "creatorEmail": "sp@gmail.com",
+      "duration": "2-4",
+      "image": "blob:http://localhost:5173/3af9feca-3f84-4cef-8ec2-b042e01a14b7",
+      "videos": [],
+      "id": 5
+    },
+    {
+      "title": "Marathi",
+      "overview": "मराठी असे आमची मायबोली",
+      "creatorName": "Shivani",
+      "creatorEmail": "sp@gmail.com",
+      "duration": "3",
+      "image": "blob:http://localhost:5173/5d6496ea-4663-4596-b27e-1232a26489a5",
+      "videos": [],
+      "id": 6
+    },
+    {
+      "title": "Hindi",
+      "overview": "b,b",
+      "creatorName": "Shivani",
+      "creatorEmail": "sp@gmail.com",
+      "duration": "8",
+      "image": "blob:http://localhost:5173/ad63e26a-f5c3-45f8-9709-9dc25449273f",
+      "videos": [],
+      "id": 7
     }
   ],
   "class": []

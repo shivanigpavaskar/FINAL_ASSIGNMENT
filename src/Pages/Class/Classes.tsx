@@ -10,6 +10,8 @@ interface ClassData {
   quiz: string;
   course: string;
   duration: string;
+  title: string;
+  trainerEmail: string;
 }
 
 interface Courses {
@@ -24,6 +26,8 @@ const Classes: FC = () => {
     quiz: "",
     course: "",
     duration: "",
+    title: "",
+    trainerEmail: "",
   });
 
   const [courses, setCourses] = useState<ClassData[]>([]);
@@ -31,14 +35,35 @@ const Classes: FC = () => {
   const [showForm, setShowForm] = useState<boolean>(false);
   const [userDesignation, setUserDesignation] = useState("");
   const [filteredCourses, setFilteredCourses] = useState<ClassData[]>(courses);
+  const [enrolledCourses, setEnrolledCourses] = useState<number[]>([]);
+  const [userEnrolledTitles, setUserEnrolledTitles] = useState<string[]>([]);
+  const [courseTitles, setCourseTitles] = useState([]);
 
   useEffect(() => {
     const userString = localStorage.getItem("UserLoggedIn");
     if (userString) {
-      const { designation } = JSON.parse(userString);
+      const { designation, email } = JSON.parse(userString);
       setUserDesignation(designation);
+      setFormData((prevState) => ({ ...prevState, trainerEmail: email }));
     }
   }, []);
+
+  useEffect(() => {
+    const userString = localStorage.getItem("UserLoggedIn");
+    if (userString) {
+      const { email, designation } = JSON.parse(userString);
+      setUserDesignation(designation);
+      const enrolledCoursesForUser =
+        JSON.parse(localStorage.getItem("enrolledCourses") || "{}")[email] ||
+        [];
+      setEnrolledCourses(enrolledCoursesForUser);
+
+      const titles = courses
+        .filter((course) => enrolledCoursesForUser.includes(course.id))
+        .map((course) => course.title);
+      setUserEnrolledTitles(titles);
+    }
+  }, [courses]);
 
   useEffect(() => {
     fetchCourses();
@@ -47,12 +72,32 @@ const Classes: FC = () => {
   const fetchCourses = async () => {
     try {
       const response = await axios.get("http://localhost:3000/class");
-      setCourses(response.data);
-      setFilteredCourses(response.data);
+      const userString = localStorage.getItem("UserLoggedIn");
+      if (userString) {
+        const { email,designation } = JSON.parse(userString);
+        if (designation === "Student") {
+          setCourses(response.data);
+          setFilteredCourses(response.data);
+        } else {
+          const filteredCoursesByTrainer = response.data.filter(
+            (course: ClassData) => course.trainerEmail === email
+          );
+          setCourses(filteredCoursesByTrainer);
+          setFilteredCourses(filteredCoursesByTrainer);
+        }
+      }
     } catch (error) {
       console.error("Error fetching courses:", error);
     }
   };
+
+
+
+  const trainerHasClassForCourse = (courses: ClassData[], courseName: string, trainerEmail: string): boolean => {
+    return courses.some(course => course.course === courseName && course.trainerEmail === trainerEmail);
+  };
+  
+
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -65,6 +110,10 @@ const Classes: FC = () => {
       setEditingId(null);
     } else {
       try {
+        if (trainerHasClassForCourse(courses, formData.course, formData.trainerEmail)) {
+          alert("You already have a class for this course!");
+          return;
+        }
         const response = await axios.post(
           "http://localhost:3000/class",
           formData
@@ -73,6 +122,7 @@ const Classes: FC = () => {
       } catch (error) {
         console.error("Error posting data:", error);
       }
+      fetchCourses();
     }
 
     setFormData({
@@ -82,6 +132,8 @@ const Classes: FC = () => {
       quiz: "",
       course: "",
       duration: "",
+      title: "",
+      trainerEmail: "",
     });
   };
 
@@ -157,8 +209,6 @@ const Classes: FC = () => {
     setShowForm(!showForm);
   };
 
-  const [courseTitles, setCourseTitles] = useState([]);
-
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -178,6 +228,14 @@ const Classes: FC = () => {
       course.course.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredCourses(filtered);
+  };
+
+  const handleJoin = (course: ClassData) => {
+    if (userEnrolledTitles.includes(course.course)) {
+      alert("You have joined the class!");
+    } else {
+      alert("You are not enrolled in the course of the same title!");
+    }
   };
 
   return (
@@ -232,6 +290,17 @@ const Classes: FC = () => {
           />
           <br />
 
+          <label htmlFor="trainerEmail">Enter Your Email</label>
+          <input
+            type="email"
+            name="trainerEmail"
+            placeholder="Enter your email"
+            value={formData.trainerEmail}
+            onChange={handleChange}
+            required
+          />
+          <br />
+
           <select
             name="course"
             value={formData.course}
@@ -246,15 +315,17 @@ const Classes: FC = () => {
             ))}
           </select>
 
-          <button className="ad-btn" type="submit">
+          <button
+            onClick={() => alert("Class created successfully")}
+            className="ad-btn"
+            type="submit"
+          >
             {editingId !== null ? "Update" : "Create class"}
           </button>
         </form>
       )}
 
-      {/* {userDesignation === "Student" && ( */}
-      <SearchBar onSearch={handleSearch} />
-      {/* )} */}
+      {userDesignation === "Student" && <SearchBar onSearch={handleSearch} />}
       <div>
         <ul>
           {filteredCourses.map((course) => (
@@ -265,20 +336,32 @@ const Classes: FC = () => {
               <p className="course-info">Overview: {course.overview}</p>
               <p className="course-info">
                 Document:
-                <button>
-                  <a href={course.document} download={course.document}>
-                    Download
-                  </a>
-                </button>
+                {(userDesignation === "Student" &&
+                  enrolledCourses.includes(course.id)) ||
+                userDesignation === "Trainer" ? (
+                  <div>
+                    <button>
+                      <a href={course.document} download={course.document}>
+                        Download
+                      </a>
+                    </button>
+                  </div>
+                ) : null}
               </p>
 
               <p className="course-info">
                 Quiz:
-                <button>
-                  <a href={course.document} download={course.document}>
-                    Download
-                  </a>
-                </button>
+                {(userDesignation === "Student" &&
+                  enrolledCourses.includes(course.id)) ||
+                userDesignation === "Trainer" ? (
+                  <div>
+                    <button>
+                      <a href={course.document} download={course.document}>
+                        Download
+                      </a>
+                    </button>
+                  </div>
+                ) : null}
               </p>
               <p className="course-info">Duration: {course.duration} weeks.</p>
 
@@ -298,12 +381,21 @@ const Classes: FC = () => {
                   </button>
                 </div>
               )}
-
               {userDesignation === "Student" && (
                 <div>
-                  <button onClick={() => alert("Youn joined the class")}>
-                    Join
-                  </button>
+                  {enrolledCourses.includes(course.id) ? (
+                    <button
+                      onClick={() =>
+                        alert("You have already joined this class!")
+                      }
+                    >
+                      Joined
+                    </button>
+                  ) : (
+                    <button onClick={() => handleJoin(course)}>
+                      Enroll the course first
+                    </button>
+                  )}
                 </div>
               )}
             </div>

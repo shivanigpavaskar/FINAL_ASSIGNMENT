@@ -1,38 +1,61 @@
-/* Layout for the Signup Form */
+ 
 .form {
-    padding: 20px;
-    margin: 50px auto;
-    max-width: 500px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 8px;
-  }
-  
-   .Form.Control-error {
-    border: 1px solid red;
-  }
-  
-   .Button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .Button:hover {
-    background-color: #0056b3;
-  }
-  
-   a {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  a:hover {
-    text-decoration: underline;
-  }
-  
+  padding: 20px;
+  margin: 50px auto;
+  max-width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  /* margin-bottom: 800px; */
+  height: 700px;
+ 
+}
+
+ .Form.Control-error {
+  border: 1px solid red;
+}
+
+ .Button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px; 
+}
+
+.Button:hover {
+  background-color: #0056b3;
+}
+
+ a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+ .error {
+  color: red;
+  margin-top: 5px;
+}
+
+ Form.Label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
+h3{
+  margin-left: 690px;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}

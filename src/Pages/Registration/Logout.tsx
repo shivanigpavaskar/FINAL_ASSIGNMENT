@@ -1,4 +1,6 @@
   import { useNavigate } from 'react-router-dom';
+  import './Logout.css'
+ 
  const Logout = () => {
     const navigate= useNavigate()
 
@@ -23,7 +25,14 @@ setTimeout(()=>{
      
 
   return (
-    <button  onClick={handleLogout}>Logout</button>
+   <>
+   <div className="mybox">
+   <h3>Done Studying?</h3> <br/>
+    <h3>Click To Log Out</h3><br/>
+     <button className='mybtn' onClick={handleLogout}>Logout</button>
+   </div>
+   
+   </>
    )
 }
 

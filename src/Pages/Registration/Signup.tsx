@@ -6,7 +6,7 @@ import { Link,useNavigate } from "react-router-dom";
 import axios from "axios";
 import Layout from "../../layouts/Layout";
 import './signup.css'
- 
+
 interface FormData {
   firstName: string;
   lastName: string;
@@ -217,13 +217,12 @@ function Signup() {
                   </Button>
                   <br />
                 </div>
-              </Form>
-              <div>
                 <p>
                   Already have an account? <Link to="/Login">Login here</Link>{" "}
                 </p>
-              </div>
-            </Container>
+              </Form>
+                
+             </Container>
           )}
         </Formik>
       </div>

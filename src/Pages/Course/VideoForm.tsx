@@ -3,7 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import "./videoForm.css";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 interface VideoData {
   vId: number;
   vtitle: string;
@@ -250,11 +250,11 @@ const VideoForm: React.FC = () => {
         </button>
       )}
 
-      {userDesignation === "Student" && (
+      {/* {userDesignation === "Student" && (
                   <Link to={`/Classes`}>
                     <button onClick={()=> alert("You joined a class")}>Join the class</button>
                   </Link>
-                )}
+                )} */}
 
 {/* {userDesignation === "Trainer" && (
                   <Link to={`/Classes`}>

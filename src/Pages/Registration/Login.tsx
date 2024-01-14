@@ -27,12 +27,10 @@ function Login() {
     actions: FormikHelpers<FormData>
   ) => {
     console.log(values);
-    // console.log(actions.isValid);
-    actions.setSubmitting(false);
+     actions.setSubmitting(false);
     setTimeout(() => {
       actions.setSubmitting(false);
-      // setdisplayData((prevData)=>[...prevData,values]);
-    }, 1000);
+     }, 1000);
 
     try {
       const result = await axios.get("http://localhost:3000/users");
@@ -48,7 +46,11 @@ function Login() {
             } else {
               actions.setErrors({
                 designation: "wrong designation",
-              });
+                email:"Wrong email",
+                password:"Wrong password"
+                
+               }
+            );
               actions.setSubmitting(false);
               return;
             }

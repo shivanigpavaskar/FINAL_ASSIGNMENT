@@ -3,8 +3,7 @@ import './dashboard.css'
 import dataObject from '../../Data/data.json';
 import { useEffect, useState } from 'react';
 import { Doughnut,Line } from "react-chartjs-2";
-
-
+ 
 
 
 
@@ -114,9 +113,8 @@ const Dashbord = () => {
           </div>
 
      </div>
-    
-  </div>
-
+    </div>
+ 
 
 
 

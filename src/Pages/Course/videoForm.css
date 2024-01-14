@@ -20,10 +20,10 @@
   }
   
   .video-card img {
-    max-width: 70%; /* Ensure the image doesn't exceed the width of the card */
-    max-height: 60%; /* Ensure the image doesn't exceed the height of the card */
-    object-fit: cover; /* Maintain aspect ratio and cover the entire space */
-    margin-bottom: 10px; /* Optional margin for spacing */
+    max-width: 70%; 
+    max-height: 60%; 
+    object-fit: cover; 
+    margin-bottom: 10px; 
   }
   
   .video-details {
