@@ -40,28 +40,6 @@
       "id": 5
     }
   ],
-  "courses": [
-    {
-      "title": "Konkani",
-      "overview": "Konkani is the mothertongue of goa",
-      "creatorName": "Priya",
-      "creatorEmail": "ph@gmail.com",
-      "duration": "9",
-      "image": "blob:http://localhost:5173/a1c1b286-63d4-4c9d-8ada-6ca0a6819380",
-      "videos": [],
-      "id": 1
-    }
-  ],
-  "class": [
-    {
-      "id": 1,
-      "overview": "This class for react course basically will have lot many knowledgeable things.",
-      "document": "../assets/videos/abc.pdf",
-      "quiz": "../assets/videos/abc.pdf",
-      "course": "Konkani",
-      "duration": "15",
-      "title": "",
-      "trainerEmail": "ph@gmail.com"
-    }
-  ]
+  "courses": [],
+  "class": []
 }
