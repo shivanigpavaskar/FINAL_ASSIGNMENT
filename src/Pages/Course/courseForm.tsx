@@ -1,117 +1,111 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
-
- interface VideoData{
-  vtitle:string;
-    description:string;
-    video:string;
-    document:string;
- }
+import React, { useState, ChangeEvent, FormEvent } from "react";
+import axios from "axios";
+ 
+interface VideoData {
+  vtitle: string;
+  description: string;
+  video: string;
+  document: string;
+}
 interface FormData {
-  id:number;
+  id: number;
   title: string;
   overview: string;
   creatorName: string;
   creatorEmail: string;
-
   duration: string;
-  image:string;
-  videos:VideoData[];
-
+  image: string;
+  videos: VideoData[];
 }
-
-
 
 interface CourseFormProps {
   onSubmit: (newCourse: FormData) => void;
   initialData?: FormData | null;
-
 }
 
-const CourseForm: React.FC<CourseFormProps> = ({ onSubmit,initialData }) => {
-  const { courseId } = useParams<{ courseId: string }>();
-  console.log('Course ID:', courseId);
+const CourseForm: React.FC<CourseFormProps> = ({ onSubmit, initialData }) => {
   const isEditMode = !!initialData;
 
   const [formData, setFormData] = useState({
-    title: initialData?.title || '',
-    overview: initialData?.overview || '',
-    creatorName: initialData?.creatorName || '',
-    creatorEmail: initialData?.creatorEmail || '',
-    duration: initialData?.duration || '',
-    image: initialData?.image || '',
-    videos:[]
-   
+    id: initialData?.id || undefined,
+    title: initialData?.title || "",
+    overview: initialData?.overview || "",
+    creatorName: initialData?.creatorName || "",
+    creatorEmail: initialData?.creatorEmail || "",
+    duration: initialData?.duration || "",
+    image: initialData?.image || "",
+    videos: [],
   });
 
-
-  
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = event.target;
-    setFormData(prevState =>({ ...prevState,
-      [name]: value,
-    }));
-     
+    setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    setFormData(prevState =>({
+    setFormData((prevState) => ({
       ...prevState,
-      image: file ? URL.createObjectURL(file) : '',
+      image: file ? URL.createObjectURL(file) : "",
     }));
   };
-
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-
-      const formDataToSend = new FormData();
-      formDataToSend.append('title', formData.title);
-      formDataToSend.append('overview', formData.overview);
-      formDataToSend.append('creatorName', formData.creatorName);
-      formDataToSend.append('creatorEmail', formData.creatorEmail);
-      formDataToSend.append('duration', formData.duration);
-      if (formData.image) {
-        formDataToSend.append('image', formData.image);
-        
-    }
-      console.log('Submitting data....', formData);
- 
-      const response = isEditMode
-      ? await axios.patch(`http://localhost:3000/courses/${courseId}`, formData)
-       : await axios.post('http://localhost:3000/courses', formData);
-      const newCourse = response.data;
-      onSubmit(newCourse);
-      alert(`${isEditMode ? 'Course updated' : 'Course created'} successfully!`);
+      if (isEditMode) {
+        await axios.put(
+          `http://localhost:3000/courses/${formData.id}`,
+          formData
+        );
+        alert("Course updated successfully!");
+      } else {
+        const response = await axios.post(
+          "http://localhost:3000/courses",
+          formData
+        );
+        const newCourse = response.data;
+        onSubmit(newCourse);
+        alert("Course created successfully!");
+      }
     } catch (error) {
-      console.error(`${isEditMode ? 'Error updating' : 'Error creating'} course:`, error);
+      console.error(
+        isEditMode ? "Error updating course:" : "Error creating course:",
+        error
+      );
     }
 
     setFormData({
-      title: '',
-      overview: '',
-      creatorName: '',
-      creatorEmail: '',
-      duration: '',
-      image:'',
-      videos:[],
-      
-    
+      title: "",
+      overview: "",
+      creatorName: "",
+      creatorEmail: "",
+      duration: "",
+      image: "",
+      videos: [],
+      id: undefined,
     });
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <label>Title:</label>
-      <input type="text" name="title" value={formData.title} onChange={handleInputChange} />
+      <input
+        type="text"
+        name="title"
+        value={formData.title}
+        onChange={handleInputChange}
+      />
 
       <label>Overview:</label>
-      <textarea name="overview" value={formData.overview} onChange={handleInputChange}></textarea>
+      <textarea
+        name="overview"
+        value={formData.overview}
+        onChange={handleInputChange}
+      ></textarea>
 
       <label>Creator Name:</label>
       <input
@@ -120,7 +114,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ onSubmit,initialData }) => {
         value={formData.creatorName}
         onChange={handleInputChange}
       />
-<label>Creator Email:</label>
+      <label>Creator Email:</label>
       <input
         type="email"
         name="creatorEmail"
@@ -136,19 +130,19 @@ const CourseForm: React.FC<CourseFormProps> = ({ onSubmit,initialData }) => {
         onChange={handleInputChange}
       />
 
-<label>Image:</label>
-      <input type="file" name="image" accept="image/*" onChange={handleImageChange} />
-      <button type="submit">{isEditMode ? 'Save Course' : 'Create Course'}</button>
-
-     </form>
+      <label>Image:</label>
+      <input
+        type="file"
+        name="image"
+        accept="image/*"
+        onChange={handleImageChange}
+      />
+      <button type="submit">
+        {isEditMode ? "Save Course" : "Create Course"}
+      </button>
+      {/* <button type='submit'>Createcourse</button> */}
+    </form>
   );
 };
 
 export default CourseForm;
-
-
-
-
-
-
-

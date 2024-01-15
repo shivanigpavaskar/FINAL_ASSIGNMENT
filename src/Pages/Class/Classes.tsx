@@ -97,33 +97,36 @@ const Classes: FC = () => {
     return courses.some(course => course.course === courseName && course.trainerEmail === trainerEmail);
   };
   
-
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     if (editingId !== null) {
-      const updatedCourses = courses.map((course) =>
-        course.id === editingId ? formData : course
-      );
-      setCourses(updatedCourses);
-      setEditingId(null);
+      try {
+        await axios.put(`http://localhost:3000/class/${editingId}`, formData);
+        const updatedCourses = courses.map((course) =>
+          course.id === editingId ? formData : course
+        );
+        setCourses(updatedCourses);
+        setEditingId(null);
+        alert("Class updated successfully!");
+      } catch (error) {
+        console.error("Error updating class:", error);
+        alert("Error updating class!");
+      }
     } else {
       try {
         if (trainerHasClassForCourse(courses, formData.course, formData.trainerEmail)) {
           alert("You already have a class for this course!");
           return;
         }
-        const response = await axios.post(
-          "http://localhost:3000/class",
-          formData
-        );
+        const response = await axios.post("http://localhost:3000/class", formData);
         setCourses([...courses, response.data]);
       } catch (error) {
         console.error("Error posting data:", error);
       }
       fetchCourses();
     }
+ 
 
     setFormData({
       id: 0,
@@ -193,6 +196,11 @@ const Classes: FC = () => {
     setFormData(course);
     setEditingId(course.id);
   };
+
+
+
+
+
 
   const handleDelete = async (id: number) => {
     try {

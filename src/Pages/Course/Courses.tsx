@@ -80,13 +80,9 @@ const Courses: React.FC<CoursesProps> = () => {
   };
 
 
-
-
-
+  
   const handleCourseFormSubmit = async (newCourse: Course) => {
     if (selectedCourse) {
-      await axios.patch(`http://localhost:3000/courses`);
-
       const updatedCourses = courses.map((course) =>
         course.id === selectedCourse.id
           ? { ...newCourse, id: selectedCourse.id }
@@ -94,16 +90,13 @@ const Courses: React.FC<CoursesProps> = () => {
       );
       setCourses(updatedCourses);
     }
-    // } else {
-    //   const newId = Date.now();
-    //   setCourses([...courses, { ...newCourse, id: newId }]);
-    // }
     handleCloseCourseForm();
-    alert("Course saved successfully!");
+    alert("Course Created successfully!");
   };
 
- 
-  
+
+
+
 
 
 
