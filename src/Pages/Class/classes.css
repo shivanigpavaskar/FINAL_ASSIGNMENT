@@ -58,8 +58,8 @@
   background-color: #c82333;
 
 }
-form {
-  max-width: 600px;
+.myform{
+  max-width: 350px;
   margin: 20px auto;
   padding: 20px;
   border: 1px solid #ccc;

@@ -2,7 +2,7 @@ import React, { useState, useEffect, ChangeEvent, FormEvent, FC } from "react";
 import axios from "axios";
 import "../Class/classes.css";
 import SearchBar from "../../Components/SearchBar";
-
+ 
 interface ClassData {
   id: number;
   overview: string;
@@ -239,7 +239,7 @@ const Classes: FC = () => {
   };
 
   return (
-    <div>
+     <div>
       {userDesignation === "Trainer" ? (
         <h1>Create class</h1>
       ) : (
@@ -253,7 +253,7 @@ const Classes: FC = () => {
       )}
 
       {showForm && (
-        <form onSubmit={handleSubmit}>
+        <form className="myform"     onSubmit={handleSubmit}>
           <label htmlFor="Overview">Overview</label>
           <input
             type="text"
@@ -403,7 +403,7 @@ const Classes: FC = () => {
         </ul>
       </div>
     </div>
-  );
+   );
 };
 
 export default Classes;

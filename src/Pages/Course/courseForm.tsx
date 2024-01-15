@@ -23,9 +23,6 @@ interface FormData {
 
 
 
-
-
-
 interface CourseFormProps {
   onSubmit: (newCourse: FormData) => void;
   initialData?: FormData | null;
@@ -35,13 +32,13 @@ interface CourseFormProps {
 const CourseForm: React.FC<CourseFormProps> = ({ onSubmit,initialData }) => {
   const { courseId } = useParams<{ courseId: string }>();
   console.log('Course ID:', courseId);
+  const isEditMode = !!initialData;
 
   const [formData, setFormData] = useState({
     title: initialData?.title || '',
     overview: initialData?.overview || '',
     creatorName: initialData?.creatorName || '',
     creatorEmail: initialData?.creatorEmail || '',
-
     duration: initialData?.duration || '',
     image: initialData?.image || '',
     videos:[]
@@ -78,23 +75,21 @@ const CourseForm: React.FC<CourseFormProps> = ({ onSubmit,initialData }) => {
       formDataToSend.append('overview', formData.overview);
       formDataToSend.append('creatorName', formData.creatorName);
       formDataToSend.append('creatorEmail', formData.creatorEmail);
-
       formDataToSend.append('duration', formData.duration);
-      // formDataToSend.append('vtitle', formData.videos.vtitle);
-      // formDataToSend.append('description', formData.videos.description);
-      // formDataToSend.append('video', formData.videos.video);
-      // formDataToSend.append('document', formData.videos.document);
       if (formData.image) {
         formDataToSend.append('image', formData.image);
         
     }
       console.log('Submitting data....', formData);
-      const response = await axios.post('http://localhost:3000/courses', formData);
-      const newCourse = response.data; 
+ 
+      const response = isEditMode
+      ? await axios.patch(`http://localhost:3000/courses/${courseId}`, formData)
+       : await axios.post('http://localhost:3000/courses', formData);
+      const newCourse = response.data;
       onSubmit(newCourse);
-      alert('Course created successfully!');
+      alert(`${isEditMode ? 'Course updated' : 'Course created'} successfully!`);
     } catch (error) {
-      console.error('Ops Error Creating course:', error);
+      console.error(`${isEditMode ? 'Error updating' : 'Error creating'} course:`, error);
     }
 
     setFormData({
@@ -143,9 +138,9 @@ const CourseForm: React.FC<CourseFormProps> = ({ onSubmit,initialData }) => {
 
 <label>Image:</label>
       <input type="file" name="image" accept="image/*" onChange={handleImageChange} />
+      <button type="submit">{isEditMode ? 'Save Course' : 'Create Course'}</button>
 
-      <button type="submit">Create Course</button>
-    </form>
+     </form>
   );
 };
 

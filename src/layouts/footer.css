@@ -1,9 +1,9 @@
    .footer{
-    background-color: blue; /* Set footer background color to blue */
+    background-color: blue; 
     color: #fff;
     padding: 10px 0;
     text-align: center;
-    flex-shrink: 0; /* Prevent the footer from shrinking */
-    width: 100%; /* Make the footer span the full width */
+    flex-shrink: 0; 
+    width: 100%; 
     margin-top: 65px;
   }

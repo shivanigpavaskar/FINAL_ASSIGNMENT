@@ -2,10 +2,11 @@ import { Button, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { basicSchema } from "../../Components/ValidationSchema";
 import { Formik, FormikHelpers } from "formik";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./login.css";
 import Layout from "../../layouts/Layout";
+import { useAuth } from "../../service/AuthContext";
 
 interface FormData {
   email: string;
@@ -21,6 +22,7 @@ const newData: FormData = {
 
 function Login() {
   const navigate = useNavigate();
+  const {login} =useAuth();
 
   const onSubmit = async (
     values: FormData,
@@ -28,52 +30,33 @@ function Login() {
   ) => {
     console.log(values);
      actions.setSubmitting(false);
-    setTimeout(() => {
-      actions.setSubmitting(false);
-     }, 1000);
+      
 
-    try {
-      const result = await axios.get("http://localhost:3000/users");
-      Navigate;
-
-      result.data.forEach((user: FormData) => {
-        if (user.email === values.email) {
-          if (user.password === values.password) {
-            if (user.designation === values.designation) {
-              localStorage.setItem("UserLoggedIn", JSON.stringify(user));
-              alert("Login Successful!");
-              navigate("/Dashboard");
-            } else {
-              actions.setErrors({
-                designation: "wrong designation",
-                email:"Wrong email",
-                password:"Wrong password"
-                
-               }
-            );
-              actions.setSubmitting(false);
-              return;
-            }
-          } else if (values.email !== "") {
-            actions.setErrors({
-              email: "wrong email",
-            });
-            actions.setSubmitting(false);
-            return;
-          } else if (values.designation !== "") {
-            actions.setErrors({
-              designation: "wrong designation",
-            });
-            actions.setSubmitting(false);
-            return;
-          }
+      try {
+        const result = await axios.get("http://localhost:3000/users");
+        const user = result.data.find(
+          (u: FormData) =>
+            u.email === values.email &&
+            u.password === values.password &&
+            u.designation === values.designation
+        );
+  
+        if (user) {
+          localStorage.setItem("UserLoggedIn", JSON.stringify(user));
+          alert("Login Successful!");
+          login({ loggedIn: true, designation: user.designation, email:user.email}); 
+           navigate("/Dashboard");
+        } else {
+          actions.setErrors({
+            designation: "Wrong designation, email, or password",
+          });
+          actions.setSubmitting(false);
         }
-      });
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+  
   return (
     <Layout>
       <>

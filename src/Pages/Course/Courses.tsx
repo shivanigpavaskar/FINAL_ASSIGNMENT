@@ -16,7 +16,7 @@ interface Course {
   title: string;
   overview: string;
   creatorName: string;
-  creatorEmail:string;
+  creatorEmail: string;
   duration: string;
   image: string;
   videos: VideoData[];
@@ -30,50 +30,44 @@ const Courses: React.FC<CoursesProps> = () => {
   const [courses, setCourses] = useState<Array<Course>>([]);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [userDesignation, setUserDesignation] = useState<string | null>(null);
- 
- 
+  const [enrolledCoursesForLoggedInUser, setEnrolledCoursesForLoggedInUser] =
+    useState<number[]>([]);
 
-useEffect(() => {
-  const userString = localStorage.getItem("UserLoggedIn");
-  if (userString) {
-    const { designation, email } = JSON.parse(userString);
-    setUserDesignation(designation);
+  useEffect(() => {
+    const userString = localStorage.getItem("UserLoggedIn");
+    if (userString) {
+      const { designation, email } = JSON.parse(userString);
+      setUserDesignation(designation);
 
-    fetch("http://localhost:3000/courses")
-      .then((response) => response.json())
-      .then((data: Course[]) => {
-        let filteredCourses = data;
+      fetch("http://localhost:3000/courses")
+        .then((response) => response.json())
+        .then((data: Course[]) => {
+          let filteredCourses = data;
 
-         if (designation !== "Student") {
-          filteredCourses = data.filter(course => course.creatorEmail === email);
-        }
+          if (designation !== "Student") {
+            filteredCourses = data.filter(
+              (course) => course.creatorEmail === email
+            );
+          }
 
-        setCourses(filteredCourses);
-      })
-      .catch((error) => {
-        console.error("Error fetching courses:", error);
-        alert("Error fetching courses!");
-      });
-  }
-}, []);
+          setCourses(filteredCourses);
+        })
+        .catch((error) => {
+          console.error("Error fetching courses:", error);
+          alert("Error fetching courses!");
+        });
 
-
-
-
-
-
-
-
-
-  
+      const enrolledCourses = JSON.parse(
+        localStorage.getItem("enrolledCourses") || "{}"
+      );
+      setEnrolledCoursesForLoggedInUser(enrolledCourses[email] || []);
+    }
+  }, []);
 
   const handleCreateCourse = () => {
     console.log("Create Course button clicked");
-     setShowCourseForm(true);
- 
+    setShowCourseForm(true);
   };
-
-
 
   const handleEdit = (course: Course) => {
     setSelectedCourse(course);
@@ -85,21 +79,34 @@ useEffect(() => {
     setShowCourseForm(false);
   };
 
-  const handleCourseFormSubmit = (newCourse: Course) => {
+
+
+
+
+  const handleCourseFormSubmit = async (newCourse: Course) => {
     if (selectedCourse) {
+      await axios.patch(`http://localhost:3000/courses`);
+
       const updatedCourses = courses.map((course) =>
         course.id === selectedCourse.id
           ? { ...newCourse, id: selectedCourse.id }
           : course
       );
       setCourses(updatedCourses);
-    } else {
-      const newId = Date.now();
-      setCourses([...courses, { ...newCourse, id: newId }]);
     }
+    // } else {
+    //   const newId = Date.now();
+    //   setCourses([...courses, { ...newCourse, id: newId }]);
+    // }
     handleCloseCourseForm();
     alert("Course saved successfully!");
   };
+
+ 
+  
+
+
+
 
   const handleDelete = async (course: Course) => {
     try {
@@ -115,65 +122,22 @@ useEffect(() => {
     }
   };
 
+  const handleEnroll = (courseId: number) => {
+    const userString = localStorage.getItem("UserLoggedIn");
+    if (userString) {
+      const { email } = JSON.parse(userString);
 
+      const enrolledCourses = JSON.parse(
+        localStorage.getItem("enrolledCourses") || "{}"
+      );
 
- 
+      enrolledCourses[email] = [...(enrolledCourses[email] || []), courseId];
 
+      localStorage.setItem("enrolledCourses", JSON.stringify(enrolledCourses));
 
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // const handleEnroll = (courseTitle: string) => {
-  //   const email = prompt('Enter your name to enroll:');
-  //   if (email) {
-  //     const currentEnrolledEmails = JSON.parse(localStorage.getItem('enrolledEmails') || '{}');
-  //     const updatedEnrolledEmails = {
-  //       ...currentEnrolledEmails,
-  //       [courseTitle]: [...(currentEnrolledEmails[courseTitle] || []), email]
-  //     };
-  //     localStorage.setItem('enrolledEmails', JSON.stringify(updatedEnrolledEmails));
-  //   }
-  // };
-
-
-
+      setEnrolledCoursesForLoggedInUser(enrolledCourses[email] || []);
+    }
+  };
 
   return (
     <Sidebar>
@@ -181,11 +145,12 @@ useEffect(() => {
         <h2>Courses</h2>
 
         {userDesignation === "Trainer" && (
-          <button onClick={handleCreateCourse}>Create Course</button>
+          <button onClick={handleCreateCourse}>  
+ Create Course          </button>
         )}
 
-        <div>
-          {courses.map((course) => (
+        <div className="courses-container">
+          {courses.map((course)=> (
             <div key={course.id} className="course-card">
               {course.image && (
                 <img src={course.image} alt={`Profile for ${course.title}`} />
@@ -209,11 +174,21 @@ useEffect(() => {
                   </Link>
                 )}
 
-                {userDesignation === "Student" && (
-                  <Link to={`/${course.id}/add`}>
-                    <button>Enroll</button>
-                  </Link>
-                )}
+                {userDesignation === "Student" &&
+                  (enrolledCoursesForLoggedInUser.includes(course.id) ? (
+                    <Link to={`/${course.id}/add`}>
+                      <button>View</button>
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        handleEnroll(course.id);
+                        alert("You Enrolled Successfully For the Course");
+                      }}
+                    >
+                      Enroll
+                    </button>
+                  ))}
               </div>
             </div>
           ))}
@@ -228,7 +203,7 @@ useEffect(() => {
               <CourseForm
                 onSubmit={handleCourseFormSubmit}
                 initialData={selectedCourse}
-               />
+              />
             </div>
           </div>
         )}

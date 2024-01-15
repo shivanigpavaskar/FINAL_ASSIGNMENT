@@ -68,10 +68,10 @@
   
 
 .chart-section-1 {
-  border: 1px solid #ccc; /* Border separating the two sections */
+  border: 1px solid #ccc; 
  
-  border-radius: 8px ; /* Optional: Rounded corners for aesthetic appeal */ 
-   padding: 20px; /* Padding inside the section */
+  border-radius: 8px ; 
+   padding: 20px; 
 
 
 
@@ -81,7 +81,7 @@
 .chart-section-2 {
   
   
-  border-radius: 8px; /* Optional: Rounded corners for aesthetic appeal */  padding: 20px; /* Padding inside the section */
+  border-radius: 8px;  padding: 20px; 
   
-  border: 1px solid #ccc; /* Border separating the two sections */
+  border: 1px solid #ccc; 
 }
