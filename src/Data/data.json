@@ -38,8 +38,74 @@
       "password": "Priya@123",
       "confirmPassword": "Priya@123",
       "id": 5
+    },
+    {
+      "firstName": "Shivani",
+      "lastName": "Pavaskar",
+      "designation": "Trainer",
+      "email": "shivani@gmail.com",
+      "password": "Shivani@123",
+      "confirmPassword": "Shivani@123",
+      "id": 6
+    },
+    {
+      "firstName": "Shivani",
+      "lastName": "Pavaskar",
+      "designation": "Trainer",
+      "email": "shivani@gmail.com",
+      "password": "Shivani@123",
+      "confirmPassword": "Shivani@123",
+      "id": 7
+    },
+    {
+      "firstName": "Pranav",
+      "lastName": "N",
+      "designation": "Student",
+      "email": "pn@gmail.com",
+      "password": "Pn@12345",
+      "confirmPassword": "Pn@12345",
+      "id": 8
+    },
+    {
+      "firstName": "Atharv",
+      "lastName": "Desai",
+      "designation": "Student",
+      "email": "ad@gmail.com",
+      "password": "Atharv@123",
+      "confirmPassword": "Atharv@123",
+      "id": 9
     }
   ],
-  "courses": [],
-  "class": []
+  "courses": [
+    {
+      "id": 1,
+      "title": "संस्कृत",
+      "overview": "भाषासु मुख्या मधुरा दिव्या गीर्वाणभारती।\nतत्रापि काव्यं मधुरं तस्मादपि सुभाषितम्॥",
+      "creatorName": "Shivani",
+      "creatorEmail": "shivani@gmail.com",
+      "duration": "6",
+      "image": "src/assets/images/e7d8ef468fa5f4827cf19726327b5f4b.jpg",
+      "videos": [
+        {
+          "vId": 1,
+          "vtitle": "Sanskrit video 1",
+          "description": "This video has basic information of the sanskrit language.",
+          "video": "../assets/videos/y2mate.com - ससकतम  पठ 1 ससकत वरणमल  Learn Sanskrit Alphabet_480p.mp4",
+          "document": "../assets/videos/abc.pdf"
+        }
+      ]
+    }
+  ],
+  "class": [
+    {
+      "id": 1,
+      "overview": "This is the class for sanskrit subject in which you will get various document and quizes for the same.",
+      "document": "../assets/videos/abc.pdf",
+      "quiz": "../assets/videos/abc.pdf",
+      "course": "संस्कृत",
+      "duration": "8",
+      "title": "",
+      "trainerEmail": "shivani@gmail.com"
+    }
+  ]
 }

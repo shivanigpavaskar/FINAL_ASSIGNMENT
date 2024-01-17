@@ -1,7 +1,12 @@
 .courses-container{
-   flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: auto auto auto auto auto; 
   gap: 10px;
-  justify-content: flex-start; 
+  /* justify-content: flex-start;  */
+  /* flex-direction:row; */
+  width: max-content;
+  
+
 
   }
 
@@ -28,3 +33,68 @@
 .course-details {
   flex: 1;
   }
+
+.spbtn{
+  padding: 8px;
+  border-radius: 8px;
+  border:blue;
+  color: white;
+  background-color: rgb(13, 76, 224);
+  width: 70px;
+  font-size: small;
+  height: 32px;
+ }
+ .spbtn1{
+  padding: 8px;
+  border-radius: 8px;
+  color: white;
+  background-color: rgb(35, 114, 251);
+  width: 130px;
+  font-size: small;
+ }
+ 
+ .myform{
+  width: 300px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+  height: 450px;
+  margin-left: 500px;
+  /* margin-bottom: -280px; */
+  
+  
+ }
+
+ label{
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+ input[type="text"],
+input[type="file"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+.close{
+  background-color: red;
+  border:6px solid red;
+  color: white;
+  border-radius: 4px;
+  margin-left: 810px;
+  margin-top: 2px;
+ font-family: monospace;
+ cursor: pointer;
+
+
+}
+
+.modal-form{
+  z-index:1;
+}

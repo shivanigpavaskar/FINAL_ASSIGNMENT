@@ -76,12 +76,24 @@ const VideoForm: React.FC = () => {
   const [playedSeconds, setPlayedSeconds] = useState(0);
   const [totalSeconds, setTotalSeconds] = useState(0);
   const [videoProgress, setVideoProgress] = useState(0);
-  const handleProgress = (state: VideoProgressState) => {
+  const handleProgress = (
+    state: VideoProgressState,
+    courseId: string | undefined
+  ) => {
     setPlayedSeconds(state.playedSeconds);
     setTotalSeconds(state.loadedSeconds);
     setVideoProgress(state.played);
 
-    localStorage.setItem(`videoProgress-${courseId}`, JSON.stringify(state));
+    const progressData = {
+      playedSeconds: state.playedSeconds,
+      totalSeconds: state.loadedSeconds,
+      played: state.played,
+    };
+
+    localStorage.setItem(
+      `videoProgress-${courseId}`,
+      JSON.stringify(progressData)
+    );
   };
 
   useEffect(() => {
@@ -154,8 +166,8 @@ const VideoForm: React.FC = () => {
         updatedCourse
       );
 
-      alert("Video Created successfully!");
       handleCloseForm();
+      alert("Video Created successfully!");
       setCurrentFormData({
         vId: 0,
         vtitle: "",
@@ -240,39 +252,25 @@ const VideoForm: React.FC = () => {
 
   return (
     <div>
-      {userDesignation === "Trainer" && (
-        <h2>Add a new video for Course</h2>
-      )}
+      {userDesignation === "Trainer" && <h2>Add a new video for Course</h2>}
 
       {userDesignation === "Trainer" && (
-        <button onClick={handleOpenForm} className="blue-button">
+        <button className="button1" onClick={handleOpenForm}>
           Add Video
         </button>
       )}
 
-      {/* {userDesignation === "Student" && (
-                  <Link to={`/Classes`}>
-                    <button onClick={()=> alert("You joined a class")}>Join the class</button>
-                  </Link>
-                )} */}
-
-{/* {userDesignation === "Trainer" && (
-                  <Link to={`/Classes`}>
-                    <button>Class +</button>
-                  </Link>
-                )} */}
-
       {isFormOpen && (
-        <form onSubmit={createVideo} method="post">
-          <label>
-            Video Title:
-            <input
-              type="text"
-              name="vtitle"
-              value={currentFormData.vtitle}
-              onChange={handleChange}
-            />
-          </label>
+        <form className="video-form" onSubmit={createVideo} method="post">
+          <label> Video Title:</label>
+          <br />
+          <input
+            type="text"
+            name="vtitle"
+            value={currentFormData.vtitle}
+            onChange={handleChange}
+          />
+
           <br />
           <br />
           <label>
@@ -294,8 +292,8 @@ const VideoForm: React.FC = () => {
             onChange={(baseURL) => handleFileChange("document", baseURL)}
           />
           <br />
-          <button type="submit">Create Video</button>
-          <button onClick={handleCloseForm}>Cancel</button>
+          <button className="button1" type="submit">Create Video</button>
+          <button  className="button1"  onClick={handleCloseForm}>Cancel</button>
         </form>
       )}
 
@@ -310,7 +308,9 @@ const VideoForm: React.FC = () => {
                   width="100%"
                   height="100%"
                   controls
-                  onProgress={handleProgress}
+                  onProgress={(state: VideoProgressState) =>
+                    handleProgress(state, courseId)
+                  }
                 ></ReactPlayer>
                 <p>Played: {formatTime(playedSeconds)}</p>
                 <p>Total Time: {formatTime(totalSeconds)}</p>
@@ -325,37 +325,41 @@ const VideoForm: React.FC = () => {
                       <a href={video.document} download={video.document}>
                         Download
                       </a>
-                      </button>
+                    </button>
                   </p>
                   {userDesignation === "Trainer" && (
                     <>
                       {editVideoId === video.vId ? (
+                      <div  className="video-form">
                         <>
+       
                           <label>
-                            Video Title:
+                            Video Title:                          </label>
+<br />
                             <input
                               type="text"
                               name="vtitle"
                               value={currentFormData.vtitle}
                               onChange={handleChange}
+                              required
                             />
-                          </label>
                           <br />
                           <br />
                           <label>
-                            Video Description:
+                            Video Description:                          </label>
+<br/>
                             <textarea
                               name="description"
                               value={currentFormData.description}
                               onChange={handleChange}
+                              required
                             />
-                          </label>
                           <br />
                           <CustomFileInput
                             label="Video File"
                             onChange={(baseURL) =>
                               handleFileChange("video", baseURL)
-                            }
+                             }
                           />
                           <br />
                           <CustomFileInput
@@ -365,19 +369,21 @@ const VideoForm: React.FC = () => {
                             }
                           />
                           <br />
-                          <button onClick={saveEditedVideo}>Save</button>
-                          <button onClick={() => setEditVideoId(null)}>
+                          <button  className="button1"     onClick={saveEditedVideo}>Save</button>
+                          <button  className="button1"     onClick={() => setEditVideoId(null)}>
                             Cancel
                           </button>
                         </>
+                    </div>
                       ) : (
                         <>
-                          <button onClick={() => handleEdit(video)}>
+                          <button   onClick={() => handleEdit(video)}>
                             Edit
                           </button>
-                          <button onClick={() => handleDelete(video.vId)}>
+                          <button     onClick={() => handleDelete(video.vId)}>
                             Delete
                           </button>
+ 
                         </>
                       )}
                     </>

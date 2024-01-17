@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
- 
+//  import img from "../../assets/images/"
 interface VideoData {
   vtitle: string;
   description: string;
@@ -44,13 +44,36 @@ const CourseForm: React.FC<CourseFormProps> = ({ onSubmit, initialData }) => {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    setFormData((prevState) => ({
-      ...prevState,
-      image: file ? URL.createObjectURL(file) : "",
-    }));
+   
+
+  const CustomFileInput: React.FC<{
+    label: string;
+    onChange: (baseURL: string) => void;
+  }> = ({ label, onChange }) => {
+    const handleFileChanges = (e: ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        const baseURL = "src/assets/images/" + file.name;
+        console.log("baseURL", baseURL);
+        onChange(baseURL);
+      }
+    };
+    return (
+      <div>
+        <label>{label}</label>
+        <input type="file" onChange={handleFileChanges} />
+      </div>
+    );
   };
+
+    const handleFileChange = (type: string, baseURL: string) => {
+      
+      setFormData((prevState) => ({
+            ...prevState,
+        [type]: baseURL,
+             
+          }));
+    };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -91,20 +114,28 @@ const CourseForm: React.FC<CourseFormProps> = ({ onSubmit, initialData }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="myform"   onSubmit={handleSubmit}>
+
+
+
+
       <label>Title:</label>
       <input
         type="text"
         name="title"
         value={formData.title}
         onChange={handleInputChange}
+        required
       />
+      <br/>
+      
 
       <label>Overview:</label>
       <textarea
         name="overview"
         value={formData.overview}
         onChange={handleInputChange}
+        required
       ></textarea>
 
       <label>Creator Name:</label>
@@ -113,6 +144,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ onSubmit, initialData }) => {
         name="creatorName"
         value={formData.creatorName}
         onChange={handleInputChange}
+        required
       />
       <label>Creator Email:</label>
       <input
@@ -120,29 +152,32 @@ const CourseForm: React.FC<CourseFormProps> = ({ onSubmit, initialData }) => {
         name="creatorEmail"
         value={formData.creatorEmail}
         onChange={handleInputChange}
+        required
+        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+        title="Please enter a valid email address"
       />
-
-      <label>Duration (weeks):</label>
+       <label>Duration (weeks):</label>
       <input
         type="text"
         name="duration"
         value={formData.duration}
         onChange={handleInputChange}
+        required
       />
-
-      <label>Image:</label>
-      <input
-        type="file"
-        name="image"
-        accept="image/*"
-        onChange={handleImageChange}
-      />
-      <button type="submit">
+<br />
+      
+      <CustomFileInput
+            label="Image File"
+            onChange={(baseURL) => handleFileChange("image", baseURL)}
+          />
+      <br />
+      <button type="submit"     className="spbtn" style={{width:"150px",marginTop:"-30px"}}>
         {isEditMode ? "Save Course" : "Create Course"}
       </button>
-      {/* <button type='submit'>Createcourse</button> */}
-    </form>
+     </form>
   );
 };
 
 export default CourseForm;
+
+

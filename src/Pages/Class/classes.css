@@ -1,36 +1,39 @@
 
-.course-card {
+.class-card {
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
-}
+  margin-top: 10px;
+ }
 
-.course-card:hover {
+.class-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.course-title {
+.class-title {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 12px;
 }
 
-.course-info {
+.class-info {
   font-size: 14px;
   color: #666666;
 }
 
-.course-actions {
+.class-actions {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
+  gap:10px;
+  right: 100px;
   margin-top: 20px;
 }
 
-.course-actions button {
+.class-actions button {
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
@@ -38,23 +41,23 @@
   transition: background-color 0.3s ease;
 }
 
-.course-actions button.edit-btn {
+.class-actions button.edit-btn {
   background-color: #007bff;
   color: white;
 }
 
-.course-actions button.edit-btn:hover {
+.class-actions button.edit-btn:hover {
   background-color: #0056b3;
 }
 
-.course-actions button.delete-btn {
+.class-actions button.delete-btn {
   background-color: #dc3545;
   color: white;
-  margin-right: 580px;
+  /* margin-right: 580px; */
   cursor: pointer;
 }
 
-.course-actions button.delete-btn:hover {
+.class-actions button.delete-btn:hover {
   background-color: #c82333;
 
 }
@@ -69,7 +72,7 @@
   max-height: 600px;
  }
 
- label {
+ label{
   display: block;
   margin-bottom: 8px;
   font-weight: bold;
@@ -103,3 +106,14 @@ input[type="file"] {
   border-radius: 8px;
   cursor:pointer;
 }
+
+.jnbtn{
+  padding: 8px;
+  border-radius: 6px;
+  color: white;
+  background-color: rgb(13, 76, 224);
+  width: 70px;
+  font-size: small;
+}
+
+ 

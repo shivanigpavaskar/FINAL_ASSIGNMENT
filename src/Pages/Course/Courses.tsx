@@ -4,7 +4,6 @@ import "./Course.css";
 import { Link } from "react-router-dom";
 import Sidebar from "../../Components/Sidebar";
 import axios from "axios";
-
 interface VideoData {
   vtitle: string;
   description: string;
@@ -26,12 +25,14 @@ interface Course {
 interface CoursesProps {}
 
 const Courses: React.FC<CoursesProps> = () => {
+  
+
   const [showCourseForm, setShowCourseForm] = useState(false);
   const [courses, setCourses] = useState<Array<Course>>([]);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [userDesignation, setUserDesignation] = useState<string | null>(null);
   const [enrolledCoursesForLoggedInUser, setEnrolledCoursesForLoggedInUser] =
-    useState<number[]>([]);
+    useState<(string | number)[]>([]);
 
   useEffect(() => {
     const userString = localStorage.getItem("UserLoggedIn");
@@ -43,14 +44,16 @@ const Courses: React.FC<CoursesProps> = () => {
         .then((response) => response.json())
         .then((data: Course[]) => {
           let filteredCourses = data;
-
           if (designation !== "Student") {
             filteredCourses = data.filter(
               (course) => course.creatorEmail === email
-            );
-          }
-
+              );
+            }
+            
+            
           setCourses(filteredCourses);
+          // setCourses(data);
+
         })
         .catch((error) => {
           console.error("Error fetching courses:", error);
@@ -115,31 +118,53 @@ const Courses: React.FC<CoursesProps> = () => {
     }
   };
 
-  const handleEnroll = (courseId: number) => {
-    const userString = localStorage.getItem("UserLoggedIn");
-    if (userString) {
-      const { email } = JSON.parse(userString);
-
-      const enrolledCourses = JSON.parse(
-        localStorage.getItem("enrolledCourses") || "{}"
-      );
-
-      enrolledCourses[email] = [...(enrolledCourses[email] || []), courseId];
-
-      localStorage.setItem("enrolledCourses", JSON.stringify(enrolledCourses));
-
-      setEnrolledCoursesForLoggedInUser(enrolledCourses[email] || []);
+  const handleEnroll = async (course: Course) => {
+    try {
+      const userString = localStorage.getItem("UserLoggedIn");
+      if (userString) {
+        const { email } = JSON.parse(userString);
+  
+        const enrolledCoursesForUser = [...enrolledCoursesForLoggedInUser, course.title];
+        localStorage.setItem(
+          "enrolledCourses",
+          JSON.stringify({ ...JSON.parse(localStorage.getItem("enrolledCourses") || "{}"), [email]: enrolledCoursesForUser })
+        );
+  
+        setEnrolledCoursesForLoggedInUser(enrolledCoursesForUser);
+  
+        alert("You have successfully enrolled in this course!");
+      } else {
+        alert("User details not found. Please log in.");
+      }
+    } catch (error) {
+      console.error("Error enrolling in the course:", error);
+      alert("Error enrolling in the course!");
     }
   };
-
+  
+   
   return (
     <Sidebar>
       <div>
         <h2>Courses</h2>
 
         {userDesignation === "Trainer" && (
-          <button onClick={handleCreateCourse}>  
+          <button className="spbtn1"   onClick={handleCreateCourse}>  
  Create Course          </button>
+        )}
+
+{showCourseForm && (
+          <div>
+            <div>
+              <span className="close" onClick={handleCloseCourseForm}>
+                X
+              </span>
+              <CourseForm
+                onSubmit={handleCourseFormSubmit}
+                initialData={selectedCourse}
+              />
+            </div>
+          </div>
         )}
 
         <div className="courses-container">
@@ -154,32 +179,33 @@ const Courses: React.FC<CoursesProps> = () => {
                 <p>Summary:{course.overview}</p>
                 <p>Faculty: {course.creatorName}</p>
                 <p>Duration: {course.duration} weeks</p>
+                <br />
 
                 {userDesignation === "Trainer" && (
                   <>
-                    <button onClick={() => handleEdit(course)}>Edit</button>
-                    <button onClick={() => handleDelete(course)}>Delete</button>
+                    <button className="spbtn"  style={{margin:"4px"}} onClick={() => handleEdit(course)}>Edit</button>
+                    <button className="spbtn" onClick={() => handleDelete(course)}>Delete</button>
                   </>
                 )}
                 {userDesignation === "Trainer" && (
                   <Link to={`/${course.id}/add`}>
-                    <button>View</button>
+                    <button className="spbtn">View</button>
                   </Link>
                 )}
 
                 {userDesignation === "Student" &&
-                  (enrolledCoursesForLoggedInUser.includes(course.id) ? (
+                  (enrolledCoursesForLoggedInUser.includes(course.title) ? (
                     <Link to={`/${course.id}/add`}>
-                      <button>View</button>
+                      <button className="spbtn">View</button>
                     </Link>
                   ) : (
-                    <button
-                      onClick={() => {
-                        handleEnroll(course.id);
-                        alert("You Enrolled Successfully For the Course");
+                    <button className="spbtn"
+                      onClick={() => {handleEnroll(course)
+                         alert("You Enrolled Successfully For the Course");
                       }}
                     >
-                      Enroll
+                    {enrolledCoursesForLoggedInUser.includes(course.title) ? "View" : "Enroll"}
+
                     </button>
                   ))}
               </div>
@@ -187,19 +213,7 @@ const Courses: React.FC<CoursesProps> = () => {
           ))}
         </div>
 
-        {showCourseForm && (
-          <div className="modal">
-            <div className="modal-content">
-              <span className="close" onClick={handleCloseCourseForm}>
-                &times;
-              </span>
-              <CourseForm
-                onSubmit={handleCourseFormSubmit}
-                initialData={selectedCourse}
-              />
-            </div>
-          </div>
-        )}
+        
       </div>
     </Sidebar>
   );

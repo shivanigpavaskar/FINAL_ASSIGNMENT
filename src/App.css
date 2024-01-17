@@ -18,7 +18,8 @@ main{
 .sidebar{
   background: rgb(13, 76, 224);
   color: white;
-  height: 110vh;
+  min-height: 110vh;
+  max-height: max-content;
   width: 100px;
   transition: all 0.5s;
   /* position: fixed; */

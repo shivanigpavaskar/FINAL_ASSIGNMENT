@@ -1,3 +1,22 @@
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { useState, useEffect, ChangeEvent, FormEvent, FC } from "react";
 import axios from "axios";
 import "../Class/classes.css";
@@ -35,9 +54,19 @@ const Classes: FC = () => {
   const [showForm, setShowForm] = useState<boolean>(false);
   const [userDesignation, setUserDesignation] = useState("");
   const [filteredCourses, setFilteredCourses] = useState<ClassData[]>(courses);
-  const [enrolledCourses, setEnrolledCourses] = useState<number[]>([]);
-  const [userEnrolledTitles, setUserEnrolledTitles] = useState<string[]>([]);
+   const [userEnrolledTitles, setUserEnrolledTitles] = useState<string[]>([]);
   const [courseTitles, setCourseTitles] = useState([]);
+  const [enrollmentStatus, setEnrollmentStatus] = useState<Record<number, boolean>>({});
+
+
+  useEffect(() => {
+    const initialStatus: Record<number, boolean> = {};
+    courses.forEach(course => {
+      initialStatus[course.id] = userEnrolledTitles.includes(course.course);
+    });
+    setEnrollmentStatus(initialStatus);
+  }, [courses, userEnrolledTitles]);
+
 
   useEffect(() => {
     const userString = localStorage.getItem("UserLoggedIn");
@@ -56,8 +85,7 @@ const Classes: FC = () => {
       const enrolledCoursesForUser =
         JSON.parse(localStorage.getItem("enrolledCourses") || "{}")[email] ||
         [];
-      setEnrolledCourses(enrolledCoursesForUser);
-
+ 
       const titles = courses
         .filter((course) => enrolledCoursesForUser.includes(course.id))
         .map((course) => course.title);
@@ -238,13 +266,68 @@ const Classes: FC = () => {
     setFilteredCourses(filtered);
   };
 
+
+ 
+ 
+   
   const handleJoin = (course: ClassData) => {
-    if (userEnrolledTitles.includes(course.course)) {
-      alert("You have joined the class!");
-    } else {
-      alert("You are not enrolled in the course of the same title!");
+    try {
+      const userString = localStorage.getItem("UserLoggedIn");
+      if (userString) {
+        const { email } = JSON.parse(userString);
+  
+        if (userEnrolledTitles.includes(course.course)) {
+          alert("You have already joined the class!");
+        } else {
+          const updatedEnrolledCourses = [
+            ...userEnrolledTitles,
+            course.course,
+          ];
+  
+   
+          localStorage.setItem(
+            "enrolledCourses",
+            JSON.stringify({
+              ...JSON.parse(localStorage.getItem("enrolledCourses") || "{}"),
+              [email]: updatedEnrolledCourses,
+            })
+          );
+          setUserEnrolledTitles(updatedEnrolledCourses);
+          alert("You have successfully joined the class!");
+        }
+      } else {
+        alert("User details not found. Please log in.");
+      }
+    } catch (error) {
+      console.error("Error joining the class:", error);
+      alert("Error joining the class!");
     }
   };
+  
+
+
+
+  useEffect(() => {
+    const userString = localStorage.getItem("UserLoggedIn");
+    if (userString) {
+      const { email, designation } = JSON.parse(userString);
+      setUserDesignation(designation);
+  
+       const enrolledCoursesForUser =
+        JSON.parse(localStorage.getItem("enrolledCourses") || "{}")[email] || [];
+      const enrollmentStatusData = JSON.parse(localStorage.getItem("enrollmentStatus") || "{}");
+  
+       const initialStatus: Record<number, boolean> = {};
+      courses.forEach(course => {
+        initialStatus[course.id] = enrolledCoursesForUser.includes(course.course) && enrollmentStatusData[email]?.[course.id];
+      });
+  
+      setEnrollmentStatus(initialStatus);
+      setUserEnrolledTitles(enrolledCoursesForUser);
+    }
+  }, [courses]);
+  
+
 
   return (
      <div>
@@ -255,7 +338,7 @@ const Classes: FC = () => {
       )}
 
       {userDesignation === "Trainer" && (
-        <button onClick={toggleForm} className="create-class-btn">
+        <button onClick={toggleForm} className="ad-btn" style={{width:"150px"}}>
           {showForm ? "Hide Form" : "Create New Class"}
         </button>
       )}
@@ -337,31 +420,16 @@ const Classes: FC = () => {
       <div>
         <ul>
           {filteredCourses.map((course) => (
-            <div className="course-card" key={course.id}>
-              <h2 className="course-title">
-                Created Class for Course {course.course}
+            <div className="class-card" key={course.id}>
+              <h2 className="class-title">Class {course.course}
               </h2>
-              <p className="course-info">Overview: {course.overview}</p>
-              <p className="course-info">
+              <p className="class-info">Overview: {course.overview}</p>
+              <p className="class-info">
                 Document:
-                {(userDesignation === "Student" &&
-                  enrolledCourses.includes(course.id)) ||
-                userDesignation === "Trainer" ? (
-                  <div>
-                    <button>
-                      <a href={course.document} download={course.document}>
-                        Download
-                      </a>
-                    </button>
-                  </div>
-                ) : null}
-              </p>
+                {userDesignation === "Student" &&           
+                       enrollmentStatus[course.id] && (
 
-              <p className="course-info">
-                Quiz:
-                {(userDesignation === "Student" &&
-                  enrolledCourses.includes(course.id)) ||
-                userDesignation === "Trainer" ? (
+                    
                   <div>
                     <button>
                       <a href={course.document} download={course.document}>
@@ -369,12 +437,27 @@ const Classes: FC = () => {
                       </a>
                     </button>
                   </div>
-                ) : null}
+                    )}
+               </p>
+
+              <p className="class-info">
+                Quiz:
+                {userDesignation === "Student" &&
+                  enrollmentStatus[course.id] && (
+
+                  <div>
+                    <button>
+                      <a href={course.document} download={course.document}>
+                        Download
+                      </a>
+                    </button>
+                  </div>
+                )}
               </p>
-              <p className="course-info">Duration: {course.duration} weeks.</p>
+              <p className="class-info">Duration: {course.duration} weeks.</p>
 
               {userDesignation === "Trainer" && (
-                <div className="course-actions">
+                <div className="class-actions">
                   <button
                     className="edit-btn"
                     onClick={() => handleEdit(course)}
@@ -391,19 +474,12 @@ const Classes: FC = () => {
               )}
               {userDesignation === "Student" && (
                 <div>
-                  {enrolledCourses.includes(course.id) ? (
-                    <button
-                      onClick={() =>
-                        alert("You have already joined this class!")
-                      }
-                    >
-                      Joined
-                    </button>
-                  ) : (
-                    <button onClick={() => handleJoin(course)}>
-                      Enroll the course first
-                    </button>
-                  )}
+  
+  <button className="jnbtn"    onClick={() => handleJoin(course)}>
+  {enrollmentStatus[course.id] ? "Joined" : "Join"}
+
+                   </button>
+                     
                 </div>
               )}
             </div>
